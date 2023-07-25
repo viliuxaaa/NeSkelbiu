@@ -38,6 +38,6 @@ public class PosterImg {
 	  private byte[] data;
 	
 	  @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "poster_id")
-	    public Poster poster;
+	  @JoinColumn(name = "poster_id")
+	  public Poster poster;
 }

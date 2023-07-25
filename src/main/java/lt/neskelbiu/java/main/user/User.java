@@ -46,7 +46,7 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private UserImg userImg;
 	
 	
