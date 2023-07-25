@@ -17,6 +17,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
+import lt.neskelbiu.java.main.poster.categories.CategoryC;
+import lt.neskelbiu.java.main.poster.categories.CategoryModel;
 import lt.neskelbiu.java.main.user.User;
 
 @Entity
@@ -38,6 +40,12 @@ public class Poster {
 
     @Enumerated(EnumType.STRING)
     private CategoryB categoryB;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryC categoryC;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryModel categoryModel;
 	
 	@Column(length = 1024)
 	private String description;

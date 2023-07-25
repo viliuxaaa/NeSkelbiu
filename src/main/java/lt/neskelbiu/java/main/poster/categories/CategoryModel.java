@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum CategoryA {
-    KOMPIUTERIJA("Kompiuterija"),
-    TECHNIKA("Technika");
+public enum CategoryModel {
+    IPHONE("iPhone"),
+    DELL("DELL"),
+    MSI("MSI"),
+    ASUS("ASUS"),
+    KITA("Kita");
 
     @Getter
     private final String name;
