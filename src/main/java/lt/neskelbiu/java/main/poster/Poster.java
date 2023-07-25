@@ -1,5 +1,6 @@
 package lt.neskelbiu.java.main.poster;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,19 +43,20 @@ public class Poster {
     @Enumerated(EnumType.STRING)
     private CategoryB categoryB;
 
-    @Enumerated(EnumType.STRING)
-    private CategoryC categoryC;
-
-    @Enumerated(EnumType.STRING)
-    private CategoryModel categoryModel;
+//    @Enumerated(EnumType.STRING)
+//    private CategoryC categoryC;
+//
+//    @Enumerated(EnumType.STRING)
+//    private CategoryModel categoryModel;
 	
 	@Column(length = 1024)
 	private String description;
 	
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User user;
     
