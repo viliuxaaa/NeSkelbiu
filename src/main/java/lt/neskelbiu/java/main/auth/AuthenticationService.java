@@ -43,6 +43,7 @@ public class AuthenticationService {
                 .role(request.getRole())
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
+                .email(request.getEmail())
                 .createdAt(LocalDate.now())
                 .build();
 
