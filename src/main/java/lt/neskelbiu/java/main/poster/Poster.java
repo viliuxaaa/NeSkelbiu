@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lt.neskelbiu.java.main.poster.categories.CategoryA;
+import lt.neskelbiu.java.main.poster.categories.CategoryB;
 import lt.neskelbiu.java.main.user.User;
 
 @Entity
@@ -32,7 +34,10 @@ public class Poster {
 	private String postName;
 	
 	@Enumerated(EnumType.STRING)
-	private Category category;
+	private CategoryA categoryA;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryB categoryB;
 	
 	@Column(length = 1024)
 	private String description;
