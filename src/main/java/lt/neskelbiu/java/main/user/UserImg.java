@@ -1,13 +1,8 @@
 package lt.neskelbiu.java.main.user;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,5 +28,9 @@ public class UserImg {
 	  @Lob
 	  @Column(length = 1048576)
 	  private byte[] data;
+
+	  @OneToOne(cascade = CascadeType.ALL)
+	  @JoinColumn(name = "user_id", referencedColumnName = "id")
+	  private User user;
 	
 }
