@@ -15,6 +15,4 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 	      where u.id = :id and (t.expired = false)\s
 	      """)
 	List<RefreshToken> findAllValidTokenByUser(Long id);
-
-	Optional<RefreshToken> findByToken(String token);
 }
