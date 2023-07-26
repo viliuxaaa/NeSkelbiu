@@ -1,6 +1,7 @@
-package lt.neskelbiu.java.main.user;
+package lt.neskelbiu.java.main.userImg;
 
 import jakarta.persistence.*;
+import lt.neskelbiu.java.main.user.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
@@ -32,5 +33,4 @@ public class UserImg {
 	  @OneToOne(cascade = CascadeType.ALL)
 	  @JoinColumn(name = "user_id", referencedColumnName = "id")
 	  private User user;
-	
 }

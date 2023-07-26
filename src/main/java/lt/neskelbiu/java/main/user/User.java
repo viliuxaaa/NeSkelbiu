@@ -3,9 +3,9 @@ package lt.neskelbiu.java.main.user;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 import jakarta.persistence.*;
+import lt.neskelbiu.java.main.userImg.UserImg;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

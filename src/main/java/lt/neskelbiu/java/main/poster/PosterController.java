@@ -61,7 +61,7 @@ public class PosterController {
                 .build();
 
         Poster savedPoster = posterService.save(poster);
-        return ResponseEntity.ok(poster);
+        return ResponseEntity.ok(savedPoster);
     }
 
     @PutMapping("/{posterId}")
@@ -81,6 +81,7 @@ public class PosterController {
                 .website(post.getWebsite())
                 .videoLink(post.getVideoLink())
                 .build();
+        //when updated?
 
         Poster updatedPoster = posterService.save(poster);
         return ResponseEntity.ok(updatedPoster);
