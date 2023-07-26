@@ -34,16 +34,7 @@ public class UserImgService {
         return userImgRepository.findByUser(user);
     }
 
-    @Transactional
     public void deleteById(String id) {
         userImgRepository.deleteById(id);
-    }
-
-    public void delete(UserImg userImg) {
-        userImgRepository.delete(userImg);
-    }
-
-    public void deleteByUser(User user) {
-        userImgRepository.deleteByUser(user);
     }
 }

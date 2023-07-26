@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lt.neskelbiu.java.main.user.User;
 import lt.neskelbiu.java.main.user.UserService;
 import lt.neskelbiu.java.main.userImg.message.ResponseMessage;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,40 +20,42 @@ public class UserImgController {
     private final UserImgService userImgService;
     private final UserService userService;
 
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws InterruptedException {
+        var user = userService.findById(id);
+        var userImg = userImgService.getUserImage(user);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImg.getName() + "\"")
+                .body(userImg.getData());
+    }
+
     @PostMapping("/{id}/image-upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws InterruptedException {
+    public ResponseEntity<ResponseMessage> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws InterruptedException {
         var user = userService.findById(id);
         var userImg = userImgService.getUserImage(user);
 
-//        if (userImg != null) {
-//            userImgService.deleteById(userImg.getId());
-//            Thread.sleep(1500);
-//        }
+        if (userImg != null) {
+            userImgService.deleteById(userImg.getId());
+        }
 
         String message = "";
         try {
             userImgService.store(file, user);
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            message = "Uploaded the upload successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            message = "Could not upload the image: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
 
-    @DeleteMapping("/{id}/image-upload")
-    public ResponseEntity<ResponseMessage> DeleteFile(@PathVariable Long id) throws InterruptedException {
+    @DeleteMapping("/{id}/image-delete")
+    public ResponseEntity<ResponseMessage> deleteImage(@PathVariable Long id) {
         var user = userService.findById(id);
         var userImg = userImgService.getUserImage(user);
 
-//        if (userImg != null) {
-//            userImgService.delete(userImg.getId());
-//            Thread.sleep(1500);
-//        }
-
-        String message = "";
+        String message = "Deleted the image successfully: " + userImg.getName();
         userImgService.deleteById(userImg.getId());
-        message = "Deleted the file successfully: ";
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
 }
