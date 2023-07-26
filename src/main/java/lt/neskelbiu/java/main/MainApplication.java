@@ -2,6 +2,15 @@ package lt.neskelbiu.java.main;
 
 import lt.neskelbiu.java.main.auth.AuthenticationService;
 import lt.neskelbiu.java.main.auth.RegisterRequest;
+import lt.neskelbiu.java.main.poster.City;
+import lt.neskelbiu.java.main.poster.Poster;
+import lt.neskelbiu.java.main.poster.Status;
+import lt.neskelbiu.java.main.poster.categories.CategoryA;
+import lt.neskelbiu.java.main.poster.categories.CategoryB;
+import lt.neskelbiu.java.main.user.User;
+import lt.neskelbiu.java.main.user.UserRepository;
+import lt.neskelbiu.java.main.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

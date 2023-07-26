@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum CategoryA {
-    KOMPIUTERIJA("Kompiuterija"),
+    KOMPIUTERIJA("kompiuterija"),
     TECHNIKA("Technika");
 
     @Getter

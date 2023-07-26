@@ -13,15 +13,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
 import lt.neskelbiu.java.main.poster.categories.CategoryC;
 import lt.neskelbiu.java.main.poster.categories.CategoryModel;
 import lt.neskelbiu.java.main.user.User;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -70,4 +72,15 @@ public class Poster {
     
     @Column(nullable = true)
     private String videoLink;
+
+    @JsonIgnore
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @JsonIgnore
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @NonNull
+    private Long price;
 }

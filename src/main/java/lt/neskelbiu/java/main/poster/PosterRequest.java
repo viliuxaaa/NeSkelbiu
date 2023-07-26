@@ -24,5 +24,4 @@ public class PosterRequest {
     private City city;
     private String website;
     private String videoLink;
-
 }
