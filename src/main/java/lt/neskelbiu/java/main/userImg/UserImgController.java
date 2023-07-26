@@ -20,12 +20,14 @@ public class UserImgController {
     private final UserService userService;
 
     @PostMapping("/{id}/image-upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-        User user = userService.findById(id);
-        UserImg userImg = userImgService.getUserImage(user);
+    public ResponseEntity<ResponseMessage> uploadFile(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws InterruptedException {
+        var user = userService.findById(id);
+        var userImg = userImgService.getUserImage(user);
 
-        if (userImg != null)
-            userImgService.deleteById(userImg.getId());
+//        if (userImg != null) {
+//            userImgService.deleteById(userImg.getId());
+//            Thread.sleep(1500);
+//        }
 
         String message = "";
         try {
@@ -36,5 +38,21 @@ public class UserImgController {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
+    }
+
+    @DeleteMapping("/{id}/image-upload")
+    public ResponseEntity<ResponseMessage> DeleteFile(@PathVariable Long id) throws InterruptedException {
+        var user = userService.findById(id);
+        var userImg = userImgService.getUserImage(user);
+
+//        if (userImg != null) {
+//            userImgService.delete(userImg.getId());
+//            Thread.sleep(1500);
+//        }
+
+        String message = "";
+        userImgService.deleteById(userImg.getId());
+        message = "Deleted the file successfully: ";
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
 }

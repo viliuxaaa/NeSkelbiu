@@ -1,5 +1,6 @@
 package lt.neskelbiu.java.main.userImg;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lt.neskelbiu.java.main.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,16 @@ public class UserImgService {
         return userImgRepository.findByUser(user);
     }
 
+    @Transactional
     public void deleteById(String id) {
         userImgRepository.deleteById(id);
+    }
+
+    public void delete(UserImg userImg) {
+        userImgRepository.delete(userImg);
+    }
+
+    public void deleteByUser(User user) {
+        userImgRepository.deleteByUser(user);
     }
 }

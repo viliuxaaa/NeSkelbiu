@@ -30,7 +30,7 @@ public class UserImg {
 	  @Column(length = 1048576)
 	  private byte[] data;
 
-	  @OneToOne(cascade = CascadeType.ALL)
+	  @OneToOne
 	  @JoinColumn(name = "user_id", referencedColumnName = "id")
 	  private User user;
 }
