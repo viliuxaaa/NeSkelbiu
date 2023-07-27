@@ -30,13 +30,17 @@ public class PosterImgService {
 		);
 
 		long position = 0;
-		for (MultipartFile image : images) {
+		int count = 0;
+
+		do {
 			if (!positionsThatExists.contains(position)) {
-				PosterImg posterImg = posterImgBuilder(image, poster, position);
+				PosterImg posterImg = posterImgBuilder(images.get(count), poster, position);
 				posterImgRepository.save(posterImg);
+				count++;
 			}
 			position++;
-		}
+		} while (count < imagesListSize);
+
 		return String.format("Ikeltos %d nuotraukos", imagesListSize);
 	}
 	public PosterImg posterImgBuilder(MultipartFile file, Poster poster, Long position) throws IOException {
