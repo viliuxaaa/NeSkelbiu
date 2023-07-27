@@ -1,7 +1,8 @@
-package lt.neskelbiu.java.main.poster;
+package lt.neskelbiu.java.main.posterImg;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lt.neskelbiu.java.main.poster.Poster;
 
 @Entity
 @Data
