@@ -70,7 +70,6 @@ public class PosterController {
     public ResponseEntity<List<PosterResponse>> getSearch(
             @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "type", required = false) String type,
-            @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "city", required = false) String city,
             @RequestParam(name = "priceIsAscending", required = false) Boolean priceIsAscending,
             @RequestParam(name = "createdAt", required = false) Boolean createdAt,
@@ -79,7 +78,6 @@ public class PosterController {
         List<PosterResponse> posterList = posterService.searchEngine(
                 category,
                 type,
-                status,
                 city,
                 priceIsAscending,
                 createdAt,

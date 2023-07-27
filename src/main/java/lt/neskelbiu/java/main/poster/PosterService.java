@@ -151,7 +151,6 @@ public class PosterService {
 	public List<PosterResponse> searchEngine(
 			String category,
 			String type,
-			String status,
 			String city,
 			Boolean priceIsAscending,
 			Boolean createdAt,	//true means
@@ -166,13 +165,6 @@ public class PosterService {
 			}
 		}
 
-		Status statusEnum = null;
-		if (status != null) {
-			statusEnum = Status.valueOf(
-					status.toUpperCase()
-			);
-		}
-
 		City cityEnum = null;
 		if (city != null) {
 			cityEnum = City.valueOf(
@@ -183,22 +175,22 @@ public class PosterService {
 		List<Poster> posterList;
 		if (priceIsAscending != null) {
 			if (priceIsAscending) {
-				posterList = posterRepo.searchByAndSortByPriceAcsending(categoryA, categoryB, statusEnum, cityEnum);
+				posterList = posterRepo.searchByAndSortByPriceAcsending(categoryA, categoryB, cityEnum);
 			} else {
-				posterList = posterRepo.searchByAndSortByPriceDescending(categoryA, categoryB, statusEnum, cityEnum);
+				posterList = posterRepo.searchByAndSortByPriceDescending(categoryA, categoryB, cityEnum);
 			}
 		} else if (createdAt != null && createdAt) {
-			posterList = posterRepo.searchByAndSortByCreatedAt(categoryA, categoryB, statusEnum, cityEnum);
-			List<Poster> otherList = posterRepo.searchByAndSortByUpdatedAt(categoryA, categoryB, statusEnum, cityEnum);
+			posterList = posterRepo.searchByAndSortByCreatedAt(categoryA, categoryB, cityEnum);
+			List<Poster> otherList = posterRepo.searchByAndSortByUpdatedAt(categoryA, categoryB, cityEnum);
 			otherList.removeAll(posterList);
 			posterList.addAll(otherList);
 		} else if (updatedAt != null && updatedAt){
-			posterList = posterRepo.searchByAndSortByUpdatedAt(categoryA, categoryB, statusEnum, cityEnum);
-			List<Poster> otherList = posterRepo.searchByAndSortByCreatedAt(categoryA, categoryB, statusEnum, cityEnum);
+			posterList = posterRepo.searchByAndSortByUpdatedAt(categoryA, categoryB, cityEnum);
+			List<Poster> otherList = posterRepo.searchByAndSortByCreatedAt(categoryA, categoryB, cityEnum);
 			otherList.removeAll(posterList);
 			posterList.addAll(otherList);
 		} else {
-			posterList = posterRepo.searchBy(categoryA, categoryB, statusEnum, cityEnum);
+			posterList = posterRepo.searchBy(categoryA, categoryB, cityEnum);
 		}
 		return posterListResponse(posterList);
 	}
