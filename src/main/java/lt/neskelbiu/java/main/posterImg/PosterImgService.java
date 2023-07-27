@@ -1,14 +1,13 @@
 package lt.neskelbiu.java.main.posterImg;
 
-import java.io.IOException;
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
+import lt.neskelbiu.java.main.poster.Poster;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
-import lt.neskelbiu.java.main.poster.Poster;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +38,10 @@ public class PosterImgService {
 	                .poster(poster)
 	                .build();
 		 return posterImg;
+	}
+
+
+	public void delete(PosterImg posterImg) {
+		posterImgRepository.deleteById(posterImg.getId());
 	}
 }

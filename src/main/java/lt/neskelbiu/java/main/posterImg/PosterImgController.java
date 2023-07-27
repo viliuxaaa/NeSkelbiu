@@ -89,19 +89,10 @@ public class PosterImgController {
 				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgId));
 
 		try{
-			posterImgRepository.delete(posterImg);
+			posterImgService.delete(posterImg);
 			return ResponseEntity.ok("Image deleted successfully.");
 		} catch (Exception e){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete image.");
 		}
 	}
-//	@DeleteMapping("/{id}/image-delete")
-//	public ResponseEntity<ResponseMessage> deleteImage(@PathVariable Long id) {
-//		var user = userService.findById(id);
-//		var userImg = userImgService.getUserImage(user);
-//
-//		String message = "Deleted the image successfully: " + userImg.getName();
-//		userImgService.deleteById(userImg.getId());
-//		return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-//	}
 }
