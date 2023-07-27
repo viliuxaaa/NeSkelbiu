@@ -3,10 +3,9 @@ package lt.neskelbiu.java.main.posterImg;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import lt.neskelbiu.java.main.exceptions.PosterImgNotFoundException;
 import lt.neskelbiu.java.main.exceptions.PosterNotFoundException;
-import lt.neskelbiu.java.main.userImg.message.ResponseMessage;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,13 +21,14 @@ import lt.neskelbiu.java.main.poster.PosterService;
 public class PosterImgController {
 	
 	private final PosterImgService posterImgService;
+	private final PosterImgRepository posterImgRepository;
 	private final PosterService posterService;
 	private final PosterRepository posterRepository;
 
 	@GetMapping("/images/{posterId}")
 	public ResponseEntity<List<byte[]>> getImages(@PathVariable Long posterId) {
 		Poster poster = posterRepository.findById(posterId)
-				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id" + posterId));
+				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
 
 		List<byte[]> imageList = poster.getPosterImg().stream()
 				.map(PosterImg::getData)
@@ -41,14 +41,34 @@ public class PosterImgController {
 				.headers(headers)
 				.body(imageList);
 	}
+
+	@GetMapping("/images/{posterId}/{posterImgId}")
+	public ResponseEntity<byte[]> getImage(@PathVariable Long posterId, @PathVariable String posterImgId) {
+		Poster poster = posterRepository.findById(posterId)
+				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
+
+		PosterImg posterImg = poster.getPosterImg().stream()
+				.filter(img -> img.getId().equals(posterImgId))
+				.findFirst()
+				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgId));
+
+		byte[] imageData = posterImg.getData();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.valueOf(posterImg.getType()));
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.headers(headers)
+				.body(imageData);
+	}
 	
-	@PostMapping("/{posterId}/image-upload")
+	@PostMapping("/images/{posterId}/upload")
 	public ResponseEntity<String> uploadImages(
 			@RequestParam(name = "images") MultipartFile[] images,
             @PathVariable Long posterId
 	) {
 		Poster poster = posterRepository.findById(posterId)
-				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id" + posterId));
+				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
 		try {
 			List<MultipartFile> imagesList = Arrays.asList(images);
 			String result = posterImgService.store(imagesList, poster);
@@ -58,6 +78,23 @@ public class PosterImgController {
 		}
 	}
 
+	@DeleteMapping("/images/{posterId}/{posterImgId}")
+	public ResponseEntity<String> deleteImage(@PathVariable Long posterId, @PathVariable String posterImgId){
+		Poster poster = posterRepository.findById(posterId)
+				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
+
+		PosterImg posterImg = poster.getPosterImg().stream()
+				.filter(img -> img.getId().equals(posterImgId))
+				.findFirst()
+				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgId));
+
+		try{
+			posterImgRepository.delete(posterImg);
+			return ResponseEntity.ok("Image deleted successfully.");
+		} catch (Exception e){
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete image.");
+		}
+	}
 //	@DeleteMapping("/{id}/image-delete")
 //	public ResponseEntity<ResponseMessage> deleteImage(@PathVariable Long id) {
 //		var user = userService.findById(id);
