@@ -75,12 +75,10 @@ public class Poster {
     
     @Column(nullable = true)
     private String videoLink;
-    
-    @JsonIgnore
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @JsonIgnore
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

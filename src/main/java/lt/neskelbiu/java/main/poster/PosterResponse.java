@@ -20,6 +20,7 @@ public class PosterResponse {
     private String postName;
     private String description;
     private Map<Long, String> images;
+    private Long price;
     private CategoryA categoryA;
     private CategoryB categoryB;
     private Status status;
@@ -27,4 +28,6 @@ public class PosterResponse {
     private String city;
     private String website;
     private String videoLink;
+    private String createdAt;
+    private String updatedAt;
 }

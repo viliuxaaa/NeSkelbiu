@@ -1,5 +1,7 @@
 package lt.neskelbiu.java.main.poster;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,10 +23,11 @@ public class PosterService {
 
 	private final PosterRepository posterRepo;
 	private final UserService userService;
-	
-	public List<PosterResponse> findAll() {
-		List<Poster> posterList = posterRepo.findAll();
 
+	public List<Poster> findAll() {
+		return posterRepo.findAll();
+	}
+	public List<PosterResponse> posterListResponse(List<Poster> posterList) {
 		List<PosterResponse> responseList = posterList.stream()
 				.map(poster -> PosterResponse.builder()
 						.posterid(poster.getId())
@@ -35,6 +38,7 @@ public class PosterService {
 								poster.getPosterImg().stream()
 										.collect(Collectors.toMap(PosterImg::getPosition, PosterImg::getId))
 						)
+						.price(poster.getPrice())
 						.categoryA(poster.getCategoryA())
 						.categoryB(poster.getCategoryB())
 						.status(poster.getStatus())
@@ -42,6 +46,16 @@ public class PosterService {
 						.phoneNumber(poster.getPhoneNumber())
 						.website(poster.getWebsite())
 						.videoLink(poster.getVideoLink())
+						.createdAt(
+								poster.getCreatedAt() != null
+										? poster.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+										: null
+								)
+						.updatedAt(
+								poster.getUpdatedAt() != null
+										? poster.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+										: null
+						)
 						.build())
 				.toList();
 		return responseList;
@@ -62,6 +76,7 @@ public class PosterService {
 						poster.getPosterImg().stream()
 								.collect(Collectors.toMap(PosterImg::getPosition, PosterImg::getId))
 				)
+				.price(poster.getPrice())
 				.categoryA(poster.getCategoryA())
 				.categoryB(poster.getCategoryB())
 				.status(poster.getStatus())
@@ -69,6 +84,16 @@ public class PosterService {
 				.phoneNumber(poster.getPhoneNumber())
 				.website(poster.getWebsite())
 				.videoLink(poster.getVideoLink())
+				.createdAt(
+						poster.getCreatedAt() != null
+								? poster.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+								: null
+				)
+				.updatedAt(
+						poster.getUpdatedAt() != null
+								? poster.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+								: null
+				)
 				.build();
 	}
 
@@ -79,33 +104,39 @@ public class PosterService {
 				.categoryA(post.getCategoryA())
 				.categoryB(post.getCategoryB())
 				.description(post.getDescription())
+				.price(post.getPrice())
 				.status(post.getStatus())
 				.user(user)
 				.phoneNumber(post.getPhoneNumber())
 				.city(post.getCity())
 				.website(post.getWebsite())
 				.videoLink(post.getVideoLink())
+				.createdAt(LocalDateTime.now())
 				.build();
 		return poster;
 	}
 
 	public Poster buildPosterWithId(Long posterId, PosterRequest post) {
 		var user = userService.findById(posterId);
+		Poster poster = findById(posterId);
 
-		Poster poster = Poster.builder()
+		Poster updatedPoster = Poster.builder()
 				.id(posterId)
 				.postName(post.getPostName())
 				.categoryA(post.getCategoryA())
 				.categoryB(post.getCategoryB())
 				.description(post.getDescription())
+				.price(poster.getPrice())
 				.status(post.getStatus())
 				.user(user)
 				.phoneNumber(post.getPhoneNumber())
 				.city(post.getCity())
 				.website(post.getWebsite())
 				.videoLink(post.getVideoLink())
+				.createdAt(poster.getCreatedAt())
+				.updatedAt(LocalDateTime.now())
 				.build();
-		return poster;
+		return updatedPoster;
 	}
 
 
@@ -117,7 +148,7 @@ public class PosterService {
 		posterRepo.deleteById(id);
 	}
 
-	public List<Poster> searchEngine(
+	public List<PosterResponse> searchEngine(
 			String category,
 			String type,
 			String status,
@@ -156,21 +187,19 @@ public class PosterService {
 			} else {
 				posterList = posterRepo.searchByAndSortByPriceDescending(categoryA, categoryB, statusEnum, cityEnum);
 			}
-		} else if (createdAt != null) {
+		} else if (createdAt != null && createdAt) {
 			posterList = posterRepo.searchByAndSortByCreatedAt(categoryA, categoryB, statusEnum, cityEnum);
-			//po to prideto atnaujintus papildomai
-		} else if (updatedAt != null){
+			List<Poster> otherList = posterRepo.searchByAndSortByUpdatedAt(categoryA, categoryB, statusEnum, cityEnum);
+			otherList.removeAll(posterList);
+			posterList.addAll(otherList);
+		} else if (updatedAt != null && updatedAt){
 			posterList = posterRepo.searchByAndSortByUpdatedAt(categoryA, categoryB, statusEnum, cityEnum);
-			//po to pridetu naujausiai sukurtus
+			List<Poster> otherList = posterRepo.searchByAndSortByCreatedAt(categoryA, categoryB, statusEnum, cityEnum);
+			otherList.removeAll(posterList);
+			posterList.addAll(otherList);
 		} else {
-			posterList = posterRepo.searchBy(
-					categoryA,
-					categoryB,
-					statusEnum,
-					cityEnum
-			);
+			posterList = posterRepo.searchBy(categoryA, categoryB, statusEnum, cityEnum);
 		}
-
-		return posterList;
+		return posterListResponse(posterList);
 	}
 }

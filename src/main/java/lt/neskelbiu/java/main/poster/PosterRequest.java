@@ -14,9 +14,10 @@ import lt.neskelbiu.java.main.user.User;
 @Builder
 public class PosterRequest {
     private String postName;
+    private String description;
+    private Long price;
     private CategoryA categoryA;
     private CategoryB categoryB;
-    private String description;
     private Status status;
     private Long phoneNumber;
     private City city;

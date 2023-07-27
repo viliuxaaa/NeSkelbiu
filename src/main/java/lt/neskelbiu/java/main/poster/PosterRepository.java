@@ -36,7 +36,7 @@ public interface PosterRepository extends JpaRepository<Poster, Long>{
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:statusEnum is NULL OR t.status = :statusEnum)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
-            ORDER BY t.createdAt
+            ORDER BY t.createdAt DESC
             """)
     List<Poster> searchByAndSortByCreatedAt(CategoryA categoryA, CategoryB categoryB, Status statusEnum, City cityEnum);
 
@@ -46,7 +46,7 @@ public interface PosterRepository extends JpaRepository<Poster, Long>{
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:statusEnum is NULL OR t.status = :statusEnum)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
-            ORDER BY t.updatedAt
+            ORDER BY t.updatedAt DESC
             """)
     List<Poster> searchByAndSortByUpdatedAt(CategoryA categoryA, CategoryB categoryB, Status statusEnum, City cityEnum);
 

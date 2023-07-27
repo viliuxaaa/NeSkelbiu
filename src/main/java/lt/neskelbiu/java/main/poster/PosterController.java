@@ -30,7 +30,8 @@ public class PosterController {
 
     @GetMapping("/get/all")
     public ResponseEntity<List<PosterResponse>> getAllPosters() {
-        List<PosterResponse> postersList = posterService.findAll();
+        List<Poster> posterList = posterService.findAll();
+        List<PosterResponse> postersList = posterService.posterListResponse(posterList);
         return ResponseEntity.ok(postersList);
     }
 
@@ -66,7 +67,7 @@ public class PosterController {
     }
 
     @GetMapping("/get/search")
-    public ResponseEntity<List<Poster>> getSearch(
+    public ResponseEntity<List<PosterResponse>> getSearch(
             @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "type", required = false) String type,
             @RequestParam(name = "status", required = false) String status,
@@ -75,7 +76,7 @@ public class PosterController {
             @RequestParam(name = "createdAt", required = false) Boolean createdAt,
             @RequestParam(name = "updatedAt", required = false) Boolean updatedAt
     ) {
-        List<Poster> posterList = posterService.searchEngine(
+        List<PosterResponse> posterList = posterService.searchEngine(
                 category,
                 type,
                 status,
