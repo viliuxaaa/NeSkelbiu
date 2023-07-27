@@ -16,30 +16,28 @@ public class PosterImgService {
 	
 	private final PosterImgRepository posterImgRepository;
 
-	public String store(List<MultipartFile> files, Poster poster) throws IOException {
+	public String store(List<MultipartFile> images, Poster poster) throws IOException {
 	    List<PosterImg> posterImages = posterImgRepository.findAllByPosterId(poster.getId());
+		int posterImagesListSize = posterImages.size(); //4
+		int imagesListSize = images.size();			//3
 
-	    if (posterImages.size() + files.size() <= 3) {
-	        for (MultipartFile file : files) {
-	            PosterImg posterImg = posterBuilder(file, poster);
-	            posterImgRepository.save(posterImg);
-	        }
-	        return "success";
-	    } else {
-	        return "Nuotrauku limitas pasiektas. Istrinkite nuotraukas pries dedamas naujas";
-	    }
+		if (posterImagesListSize + imagesListSize > 6)
+			throw (new IOException());
+
+		for (MultipartFile image : images) {
+			PosterImg posterImg = posterImgBuilder(image, poster);
+			posterImgRepository.save(posterImg);
+		}
+		return String.format("Ikeltos %d nuotraukos", imagesListSize);
 	}
-	public PosterImg posterBuilder(MultipartFile file, Poster poster) throws IOException {
-		
+	public PosterImg posterImgBuilder(MultipartFile file, Poster poster) throws IOException {
 		 String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		
 		 PosterImg posterImg = PosterImg.builder()
 	                .name(fileName)
 	                .type(file.getContentType())
 	                .data(file.getBytes())
 	                .poster(poster)
 	                .build();
-		 
 		 return posterImg;
 	}
 }

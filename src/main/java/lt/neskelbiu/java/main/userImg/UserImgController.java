@@ -6,6 +6,7 @@ import lt.neskelbiu.java.main.user.UserService;
 import lt.neskelbiu.java.main.userImg.message.ResponseMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +25,11 @@ public class UserImgController {
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws InterruptedException {
         var user = userService.findById(id);
         var userImg = userImgService.getUserImage(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+
         return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImg.getName() + "\"")
+                .headers(headers)
                 .body(userImg.getData());
     }
 
