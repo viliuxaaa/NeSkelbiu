@@ -31,7 +31,6 @@ public class PosterImgService {
 
 		long position = 0;
 		int count = 0;
-
 		do {
 			if (!positionsThatExists.contains(position)) {
 				PosterImg posterImg = posterImgBuilder(images.get(count), poster, position);

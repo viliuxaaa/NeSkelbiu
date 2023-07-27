@@ -38,20 +38,8 @@ public class PosterController {
     public ResponseEntity<PosterResponse> getPoster(
             @PathVariable Long posterId
     ) {
-        var poster = posterService.findById(posterId);
-
-        PosterResponse posterResponse = PosterResponse.builder()
-                .postName(poster.getPostName())
-                .categoryA(poster.getCategoryA())
-                .categoryB(poster.getCategoryB())
-                .description(poster.getDescription())
-                .status(poster.getStatus())
-                .phoneNumber(poster.getPhoneNumber())
-                .city(poster.getCity().getName())
-                .website(poster.getWebsite())
-                .videoLink(poster.getVideoLink())
-                .build();
-
+        Poster poster = posterService.findById(posterId);
+        PosterResponse posterResponse = posterService.buildPosterResponse(poster);
         return ResponseEntity.ok(posterResponse);
     }
 
@@ -60,42 +48,14 @@ public class PosterController {
             @PathVariable Long userId,
             @RequestBody PosterRequest post
     ) {
-        var user = userService.findById(userId);
-        Poster poster = Poster.builder()
-                .postName(post.getPostName())
-                .categoryA(post.getCategoryA())
-                .categoryB(post.getCategoryB())
-                .description(post.getDescription())
-                .status(post.getStatus())
-                .user(user)
-                .phoneNumber(post.getPhoneNumber())
-                .city(post.getCity())
-                .website(post.getWebsite())
-                .videoLink(post.getVideoLink())
-                .build();
-
+        Poster poster = posterService.buildPosterNoId(userId, post);
         Poster savedPoster = posterService.save(poster);
         return ResponseEntity.ok(savedPoster);
     }
 
     @PutMapping("/update/{posterId}")
     public ResponseEntity<Poster> updatePoster(@PathVariable Long posterId, @RequestBody PosterRequest post) {
-        var user = userService.findById(posterId);
-
-        Poster poster = Poster.builder()
-                .id(posterId)
-                .postName(post.getPostName())
-                .categoryA(post.getCategoryA())
-                .categoryB(post.getCategoryB())
-                .description(post.getDescription())
-                .status(post.getStatus())
-                .user(user)
-                .phoneNumber(post.getPhoneNumber())
-                .city(post.getCity())
-                .website(post.getWebsite())
-                .videoLink(post.getVideoLink())
-                .build();
-
+        Poster poster = posterService.buildPosterWithId(posterId, post);
         Poster updatedPoster = posterService.save(poster);
         return ResponseEntity.ok(updatedPoster);
     }

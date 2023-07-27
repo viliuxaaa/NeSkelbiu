@@ -3,6 +3,7 @@ package lt.neskelbiu.java.main.posterImg;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import lt.neskelbiu.java.main.exceptions.PosterImgNotFoundException;
 import lt.neskelbiu.java.main.exceptions.PosterNotFoundException;
@@ -78,15 +79,15 @@ public class PosterImgController {
 		}
 	}
 
-	@DeleteMapping("/images/{posterId}/{posterImgId}")
-	public ResponseEntity<String> deleteImage(@PathVariable Long posterId, @PathVariable String posterImgId){
+	@DeleteMapping("/images/{posterId}/{posterImgPosition}")
+	public ResponseEntity<String> deleteImage(@PathVariable Long posterId, @PathVariable Long posterImgPosition){
 		Poster poster = posterRepository.findById(posterId)
 				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
 
 		PosterImg posterImg = poster.getPosterImg().stream()
-				.filter(img -> img.getId().equals(posterImgId))
+				.filter(img -> Objects.equals(img.getPosition(), posterImgPosition))
 				.findFirst()
-				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgId));
+				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgPosition));
 
 		try{
 			posterImgService.delete(posterImg);
