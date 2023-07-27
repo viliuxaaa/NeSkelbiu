@@ -13,13 +13,11 @@ import lt.neskelbiu.java.main.user.User;
 @NoArgsConstructor
 @Builder
 public class PosterRequest {
-    private Long id;
     private String postName;
     private CategoryA categoryA;
     private CategoryB categoryB;
     private String description;
     private Status status;
-    private Long userId;
     private Long phoneNumber;
     private City city;
     private String website;

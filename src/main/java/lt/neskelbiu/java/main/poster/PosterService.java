@@ -1,10 +1,13 @@
 package lt.neskelbiu.java.main.poster;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import lt.neskelbiu.java.main.exceptions.PosterNotFoundException;
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
+import lt.neskelbiu.java.main.posterImg.PosterImg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +18,27 @@ public class PosterService {
 	@Autowired
 	PosterRepository posterRepo;
 	
-	public List<Poster> findAll() {
-		return posterRepo.findAll();
+	public List<PosterResponse> findAll() {
+		List<Poster> posterList = posterRepo.findAll();
+
+		List<PosterResponse> responseList = posterList.stream()
+				.map(poster -> PosterResponse.builder()
+						.postName(poster.getPostName())
+						.description(poster.getDescription())
+						.images(
+								poster.getPosterImg().stream()
+										.collect(Collectors.toMap(PosterImg::getPosition, PosterImg::getId))
+						)
+						.categoryA(poster.getCategoryA())
+						.categoryB(poster.getCategoryB())
+						.status(poster.getStatus())
+						.city(poster.getCity().getName())
+						.phoneNumber(poster.getPhoneNumber())
+						.website(poster.getWebsite())
+						.videoLink(poster.getVideoLink())
+						.build())
+				.toList();
+		return responseList;
 	}
 	
 	public Poster findById(Long id) {

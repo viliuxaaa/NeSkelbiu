@@ -31,6 +31,8 @@ public class PosterImg {
 	  @GenericGenerator(name = "uuid", strategy = "uuid2")
 	  private String id;
 
+	  private Long position;
+
 	  private String name;
 
 	  private String type;

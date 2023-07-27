@@ -21,31 +21,46 @@ import lt.neskelbiu.java.main.poster.Poster;
 import lt.neskelbiu.java.main.poster.PosterService;
 
 @RestController
-@RequestMapping("/api/v1/posters") // Base URL mapping for all methods in this controller
+@RequestMapping("/api/v1/poster") // Base URL mapping for all methods in this controller
 @RequiredArgsConstructor
 public class PosterController {
 
     final private PosterService posterService;
     final private UserService userService;
 
-    @GetMapping("/get")
-    public ResponseEntity<List<Poster>> getAllPosters() {
-
-        List<Poster> postersList = posterService.findAll();
+    @GetMapping("/get/all")
+    public ResponseEntity<List<PosterResponse>> getAllPosters() {
+        List<PosterResponse> postersList = posterService.findAll();
         return ResponseEntity.ok(postersList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Poster> getPoster(@PathVariable Long id) {
-        var poster = posterService.findById(id);
-        return ResponseEntity.ok(poster);
+    @GetMapping("/get/{posterId}")
+    public ResponseEntity<PosterResponse> getPoster(
+            @PathVariable Long posterId
+    ) {
+        var poster = posterService.findById(posterId);
+
+        PosterResponse posterResponse = PosterResponse.builder()
+                .postName(poster.getPostName())
+                .categoryA(poster.getCategoryA())
+                .categoryB(poster.getCategoryB())
+                .description(poster.getDescription())
+                .status(poster.getStatus())
+                .phoneNumber(poster.getPhoneNumber())
+                .city(poster.getCity().getName())
+                .website(poster.getWebsite())
+                .videoLink(poster.getVideoLink())
+                .build();
+
+        return ResponseEntity.ok(posterResponse);
     }
 
-    // prideti mapinga su userId, ir pakeisti visus {id} i aiskius id kokio entity imame
-    @PostMapping
-    public ResponseEntity<Poster> createPoster(@RequestBody PosterRequest post) throws URISyntaxException {
-        var user = userService.findById(post.getUserId());
-
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<Poster> createPoster(
+            @PathVariable Long userId,
+            @RequestBody PosterRequest post
+    ) {
+        var user = userService.findById(userId);
         Poster poster = Poster.builder()
                 .postName(post.getPostName())
                 .categoryA(post.getCategoryA())
@@ -63,9 +78,9 @@ public class PosterController {
         return ResponseEntity.ok(savedPoster);
     }
 
-    @PutMapping("/{posterId}")
+    @PutMapping("/update/{posterId}")
     public ResponseEntity<Poster> updatePoster(@PathVariable Long posterId, @RequestBody PosterRequest post) {
-        var user = userService.findById(post.getUserId());
+        var user = userService.findById(posterId);
 
         Poster poster = Poster.builder()
                 .id(posterId)
@@ -85,9 +100,9 @@ public class PosterController {
         return ResponseEntity.ok(updatedPoster);
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePoster(@PathVariable Long id) {
-        posterService.deleteById(id);
+    @DeleteMapping("/delete/{posterId}")
+    public void deletePoster(@PathVariable Long posterId) {
+        posterService.deleteById(posterId);
     }
 
     @GetMapping("/get/search")
