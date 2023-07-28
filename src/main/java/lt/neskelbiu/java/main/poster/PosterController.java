@@ -35,9 +35,10 @@ public class PosterController {
         return ResponseEntity.ok(postersList);
     }
 
-    @GetMapping("/get/{posterId}")
+    @GetMapping("/get/{userId}/{posterId}")
     public ResponseEntity<PosterResponse> getPoster(
-            @PathVariable Long posterId
+            @PathVariable Long posterId,
+            @PathVariable Long userId
     ) {
         Poster poster = posterService.findById(posterId);
         PosterResponse posterResponse = posterService.buildPosterResponse(poster);

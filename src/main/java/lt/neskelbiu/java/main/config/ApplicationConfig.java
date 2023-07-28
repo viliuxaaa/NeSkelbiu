@@ -21,6 +21,11 @@ public class ApplicationConfig {
     private final UserRepository repository;
 
     @Bean
+    public WebSecurity webSecurity() {
+        return new WebSecurity();
+    }
+
+    @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));

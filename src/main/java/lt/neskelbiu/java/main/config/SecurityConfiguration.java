@@ -5,13 +5,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import java.util.function.Supplier;
 
 import static lt.neskelbiu.java.main.user.Permission.*;
 import static lt.neskelbiu.java.main.user.Role.ADMIN;
@@ -25,9 +30,13 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
+    private final WebSecurity webSecurity;
 
-    //https://stackoverflow.com/questions/51712724/how-to-allow-a-user-only-access-their-own-data-in-spring-boot-spring-security
-    //how to make users wont acces other users api, spring boot security
+    public AuthorizationDecision checkIfAuthorized(Supplier<Authentication> authentication, RequestAuthorizationContext context) {
+        String userId = context.getVariables().get("userId");
+        boolean granted = webSecurity.checkUserId(authentication, userId);
+        return new AuthorizationDecision(granted);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,9 +69,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
                         .requestMatchers(HttpMethod.PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/poster/get/{userId}/**").access(this::checkIfAuthorized)
 
-                        .anyRequest().permitAll()
-                        //.authenticated()
+
+                        .anyRequest()
+                        //.permitAll()
+                        .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
