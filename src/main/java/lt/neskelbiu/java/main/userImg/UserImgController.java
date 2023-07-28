@@ -1,9 +1,11 @@
 package lt.neskelbiu.java.main.userImg;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lt.neskelbiu.java.main.user.User;
 import lt.neskelbiu.java.main.user.UserService;
-import lt.neskelbiu.java.main.userImg.message.ResponseMessage;
+import lt.neskelbiu.java.main.message.ResponseMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,15 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "User Image Controller")
 @RequestMapping("/api/v1/user")
 public class UserImgController {
 
     private final UserImgService userImgService;
     private final UserService userService;
 
-    @GetMapping("/{id}/image")
-    public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws InterruptedException {
-        var user = userService.findById(id);
+    @Operation(
+            summary = "Used for getting user's image",
+            description = "With this endpoint you get user image. Need to provide user id."
+    )
+    @GetMapping("/get/{userId}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long userId) throws InterruptedException {
+        var user = userService.findById(userId);
         var userImg = userImgService.getUserImage(user);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
@@ -33,9 +40,16 @@ public class UserImgController {
                 .body(userImg.getData());
     }
 
-    @PostMapping("/{id}/image-upload")
-    public ResponseEntity<ResponseMessage> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws InterruptedException {
-        var user = userService.findById(id);
+    @Operation(
+            summary = "Used for uploading new user's image",
+            description = "With this endpoint you upload new or overwrite old user's image. In request param you " +
+                    "need to provide image param called \"image\" and give image as a file. This is protected path, " +
+                    "for authenticated users only."
+    )
+    @PostMapping("/{userId}/image-upload")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ResponseMessage> uploadImage(@PathVariable Long userId, @RequestParam("image") MultipartFile file) throws InterruptedException {
+        var user = userService.findById(userId);
         var userImg = userImgService.getUserImage(user);
 
         if (userImg != null) {
@@ -53,9 +67,14 @@ public class UserImgController {
         }
     }
 
-    @DeleteMapping("/{id}/image-delete")
-    public ResponseEntity<ResponseMessage> deleteImage(@PathVariable Long id) {
-        var user = userService.findById(id);
+    @Operation(
+            summary = "Used for deleting user's image",
+            description = "With this endpoint you delete user's image. This is protected path, for authenticated users only."
+    )
+    @DeleteMapping("/{userId}/image-delete")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ResponseMessage> deleteImage(@PathVariable Long userId) {
+        var user = userService.findById(userId);
         var userImg = userImgService.getUserImage(user);
 
         String message = "Deleted the image successfully: " + userImg.getName();

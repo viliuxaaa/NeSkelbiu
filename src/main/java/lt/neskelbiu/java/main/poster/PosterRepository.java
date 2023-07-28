@@ -2,6 +2,7 @@ package lt.neskelbiu.java.main.poster;
 
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
+import lt.neskelbiu.java.main.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -53,4 +54,6 @@ public interface PosterRepository extends JpaRepository<Poster, Long>{
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
             """)
     List<Poster> searchBy(CategoryA categoryA, CategoryB categoryB, City cityEnum);
+
+    List<Poster> findByUser(User user);
 }

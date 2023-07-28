@@ -1,33 +1,32 @@
 package lt.neskelbiu.java.main.poster;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
-import lt.neskelbiu.java.main.user.UserRepository;
 import lt.neskelbiu.java.main.user.UserService;
-import lt.neskelbiu.java.main.userImg.message.ResponseMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lt.neskelbiu.java.main.message.ResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lt.neskelbiu.java.main.poster.Poster;
-import lt.neskelbiu.java.main.poster.PosterService;
-
 @RestController
 @RequestMapping("/api/v1/poster") // Base URL mapping for all methods in this controller
+@Tag(name = "Poster Controller")
 @RequiredArgsConstructor
 public class PosterController {
 
     final private PosterService posterService;
-    final private UserService userService;
 
+    @Operation(
+            summary = "Used for getting all poster"
+    )
     @GetMapping("/get/all")
     public ResponseEntity<List<PosterResponse>> getAllPosters() {
         List<Poster> posterList = posterService.findAll();
@@ -35,6 +34,23 @@ public class PosterController {
         return ResponseEntity.ok(postersList);
     }
 
+    @Operation(
+            summary = "Used for getting all of single user's poster",
+            description = "With this endpoint you can get all of single user's posters. You need to provide user id."
+    )
+    @GetMapping("/get/{userId}/all")
+    public ResponseEntity<List<PosterResponse>> getAllUsersPosters(
+            @PathVariable Long userId
+    ) {
+        List<Poster> posterList = posterService.findAllUsersPosters(userId);
+        List<PosterResponse> postersList = posterService.posterListResponse(posterList);
+        return ResponseEntity.ok(postersList);
+    }
+
+    @Operation(
+            summary = "Used for getting single poster",
+            description = "With this endpoint user can get poster. You need to provide poster id."
+    )
     @GetMapping("/get/{posterId}")
     public ResponseEntity<PosterResponse> getPoster(
             @PathVariable Long posterId
@@ -44,28 +60,68 @@ public class PosterController {
         return ResponseEntity.ok(posterResponse);
     }
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<Poster> createPoster(
+    @Operation(
+            summary = "Used for creating user's poster",
+            description = "With this endpoint user can create his own poster. This is protected path, " +
+                    "for authenticated users only.\""
+    )
+    @PostMapping("/{userId}/create")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<PosterResponse> createPoster(
             @PathVariable Long userId,
             @RequestBody PosterRequest post
     ) {
         Poster poster = posterService.buildPosterNoId(userId, post);
-        Poster savedPoster = posterService.save(poster);
-        return ResponseEntity.ok(savedPoster);
+        posterService.save(poster);
+        PosterResponse posterResponse = posterService.buildPosterResponse(poster);
+        return ResponseEntity.ok(posterResponse);
     }
 
-    @PutMapping("/update/{posterId}")
-    public ResponseEntity<Poster> updatePoster(@PathVariable Long posterId, @RequestBody PosterRequest post) {
-        Poster poster = posterService.buildPosterWithId(posterId, post);
-        Poster updatedPoster = posterService.save(poster);
-        return ResponseEntity.ok(updatedPoster);
+    @Operation(
+            summary = "Used for updating user's poster",
+            description = "With this endpoint user can update his own poster. You need to provide poster id. This is protected path, " +
+                    "for authenticated users only.\""
+    )
+    @PutMapping("/{userId}/update/{posterId}")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<PosterResponse> updatePoster(
+            @PathVariable Long userId,
+            @PathVariable Long posterId,
+            @RequestBody PosterRequest post
+    ) {
+        Poster poster = posterService.buildPosterWithId(userId, posterId, post);
+        posterService.save(poster);
+        PosterResponse posterResponse = posterService.buildPosterResponse(poster);
+        return ResponseEntity.ok(posterResponse);
     }
 
-    @DeleteMapping("/delete/{posterId}")
+    @Operation(
+            summary = "Used for getting latest 10 poster"
+    )
+    @GetMapping("/get/latest")
+    public ResponseEntity<List<PosterResponse>> getLatest() {
+        return ResponseEntity.ok(posterService.getLatest());
+    }
+
+    @Operation(
+            summary = "Used for deleting user's poster",
+            description = "With this endpoint user can delete his own poster. You need to provide poster id. This is protected path, " +
+                    "for authenticated users only."
+    )
+    @DeleteMapping("/{userId}/delete/{posterId}")
+    @SecurityRequirement(name = "bearerAuth")
     public void deletePoster(@PathVariable Long posterId) {
         posterService.deleteById(posterId);
     }
 
+    @Operation(
+            summary = "Used for searching specific posters",
+            description = "With this endpoint you search for posters with paramaters. You search by category, type, city or status. These elements " +
+                    "are enums and you have to check enums on back end server files. You can also order all found posters by providing " +
+                    "priceIsAscending(true - from lowest to highest, false - from highest to lowest), by createdAt(true - order by recently " +
+                    "created posters), by updatedAt(true - order by recently updated posters). For ordering list, you must use only single attribute " +
+                    "between priceIsAscending, createdAt or updatedAt. Example: http://localhost:8080/api/v1/posters/get/search?city=alytus&status=active&category=a&type=kompiuterija&createdAt=true"
+    )
     @GetMapping("/get/search")
     public ResponseEntity<List<PosterResponse>> getSearch(
             @RequestParam(name = "category", required = false) String category,
@@ -84,106 +140,5 @@ public class PosterController {
                 updatedAt
         );
         return ResponseEntity.ok(posterList);
-    }
-
-    @GetMapping("/seed-demo")
-    public ResponseEntity<ResponseMessage> seed() {
-        var poster1 = Poster.builder()
-                .postName("Posters1")
-                .categoryA(CategoryA.KOMPIUTERIJA)
-                .categoryB(CategoryB.KOMPIUTERIAI)
-                .description("Description1")
-                .status(Status.ACTIVE)
-                .user(userService.findByUsername("admin"))
-                .city(City.ALYTUS)
-                .website("WEBSITE")
-                .videoLink("VIDEO")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(null)
-                .price(1L)
-                .build();
-        posterService.save(poster1);
-
-        var poster2 = Poster.builder()
-                .postName("Posters2")
-                .categoryA(CategoryA.KOMPIUTERIJA)
-                .categoryB(CategoryB.ISORINIAI_IRENGINIAI)
-                .description("Description2")
-                .status(Status.NOTACTIVE)
-                .user(userService.findByUsername("admin"))
-                .city(City.KLAIPEDA)
-                .website("WEBSITE")
-                .videoLink("VIDEO")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(null)
-                .price(2L)
-                .build();
-        posterService.save(poster2);
-
-        var poster3 = Poster.builder()
-                .postName("Posters3")
-                .categoryA(CategoryA.KOMPIUTERIJA)
-                .categoryB(CategoryB.KOMPIUTERIAI)
-                .description("Description1")
-                .status(Status.RESERVED)
-                .user(userService.findByUsername("admin"))
-                .city(City.KAUNAS)
-                .website("WEBSITE")
-                .videoLink("VIDEO")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(null)
-                .price(3L)
-                .build();
-        posterService.save(poster3);
-
-        var poster4 = Poster.builder()
-                .postName("Posters4")
-                .categoryA(CategoryA.TECHNIKA)
-                .categoryB(CategoryB.VIDEO)
-                .description("Description4")
-                .status(Status.ACTIVE)
-                .user(userService.findByUsername("admin"))
-                .city(City.ALYTUS)
-                .website("WEBSITE")
-                .videoLink("VIDEO")
-                .createdAt(LocalDateTime.of(2024,1,1,1,1,1,1))
-                .updatedAt(null)
-                .price(4L)
-                .build();
-        posterService.save(poster4);
-
-        var poster5 = Poster.builder()
-                .postName("Posters5")
-                .categoryA(CategoryA.TECHNIKA)
-                .categoryB(CategoryB.TECHNIKA_KITA)
-                .description("Description1")
-                .status(Status.RESERVED)
-                .user(userService.findByUsername("admin"))
-                .city(City.JONAVA)
-                .website("WEBSITE")
-                .videoLink("VIDEO")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.of(2024,1,1,1,1,1,1))
-                .price(5L)
-                .build();
-        posterService.save(poster5);
-
-        var poster6 = Poster.builder()
-                .postName("Posters6")
-                .categoryA(CategoryA.TECHNIKA)
-                .categoryB(CategoryB.SODUI)
-                .description("Description1")
-                .status(Status.ACTIVE)
-                .user(userService.findByUsername("admin"))
-                .city(City.KAUNAS)
-                .website("WEBSITE")
-                .videoLink("VIDEO")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(null)
-                .price(6L)
-                .build();
-        posterService.save(poster6);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("SEED"));
     }
 }

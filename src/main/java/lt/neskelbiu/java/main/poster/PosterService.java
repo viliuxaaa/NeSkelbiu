@@ -2,6 +2,8 @@ package lt.neskelbiu.java.main.poster;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,8 +13,10 @@ import lt.neskelbiu.java.main.exceptions.PosterNotFoundException;
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
 import lt.neskelbiu.java.main.posterImg.PosterImg;
+import lt.neskelbiu.java.main.user.User;
 import lt.neskelbiu.java.main.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -24,13 +28,18 @@ public class PosterService {
 	private final PosterRepository posterRepo;
 	private final UserService userService;
 
+	public List<Poster> findAllUsersPosters(Long userId) {
+		User user = userService.findById(userId);
+		return posterRepo.findByUser(user);
+	}
+
 	public List<Poster> findAll() {
 		return posterRepo.findAll();
 	}
 	public List<PosterResponse> posterListResponse(List<Poster> posterList) {
 		List<PosterResponse> responseList = posterList.stream()
 				.map(poster -> PosterResponse.builder()
-						.posterid(poster.getId())
+						.posterId(poster.getId())
 						.userId(poster.getUser().getId())
 						.postName(poster.getPostName())
 						.description(poster.getDescription())
@@ -68,13 +77,14 @@ public class PosterService {
 
 	public PosterResponse buildPosterResponse(Poster poster) {
 		return PosterResponse.builder()
-				.posterid(poster.getId())
+				.posterId(poster.getId())
 				.userId(poster.getUser().getId())
 				.postName(poster.getPostName())
 				.description(poster.getDescription())
-				.images(
-						poster.getPosterImg().stream()
+				.images( poster.getPosterImg() != null
+						? poster.getPosterImg().stream()
 								.collect(Collectors.toMap(PosterImg::getPosition, PosterImg::getId))
+						: new HashMap<>()
 				)
 				.price(poster.getPrice())
 				.categoryA(poster.getCategoryA())
@@ -116,8 +126,8 @@ public class PosterService {
 		return poster;
 	}
 
-	public Poster buildPosterWithId(Long posterId, PosterRequest post) {
-		var user = userService.findById(posterId);
+	public Poster buildPosterWithId(Long userId, Long posterId, PosterRequest post) {
+		var user = userService.findById(userId);
 		Poster poster = findById(posterId);
 
 		Poster updatedPoster = Poster.builder()
@@ -146,6 +156,14 @@ public class PosterService {
 	
 	public void deleteById(Long id) {
 		posterRepo.deleteById(id);
+	}
+
+	public List<PosterResponse> getLatest() {
+		List<Poster> posterList = posterRepo.searchByAndSortByCreatedAt(null, null, null).stream()
+				.limit(10)
+				.toList();
+		return posterListResponse(posterList);
+
 	}
 
 	public List<PosterResponse> searchEngine(
