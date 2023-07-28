@@ -18,22 +18,15 @@ import lt.neskelbiu.java.main.poster.PosterService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/poster-images")
+@RequestMapping("/api/v1/poster/images")
 public class PosterImgController {
 	
 	private final PosterImgService posterImgService;
-	private final PosterImgRepository posterImgRepository;
 	private final PosterService posterService;
-	private final PosterRepository posterRepository;
 
-	@GetMapping("/images/{posterId}")
+	@GetMapping("/get/{posterId}")
 	public ResponseEntity<List<byte[]>> getImages(@PathVariable Long posterId) {
-		Poster poster = posterRepository.findById(posterId)
-				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
-
-		List<byte[]> imageList = poster.getPosterImg().stream()
-				.map(PosterImg::getData)
-				.toList();
+		List<byte[]> imageList = posterImgService.getImageList(posterId);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG);
@@ -43,15 +36,9 @@ public class PosterImgController {
 				.body(imageList);
 	}
 
-	@GetMapping("/images/{posterId}/{posterImgId}")
-	public ResponseEntity<byte[]> getImage(@PathVariable Long posterId, @PathVariable String posterImgId) {
-		Poster poster = posterRepository.findById(posterId)
-				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
-
-		PosterImg posterImg = poster.getPosterImg().stream()
-				.filter(img -> img.getId().equals(posterImgId))
-				.findFirst()
-				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgId));
+	@GetMapping("/get/{posterId}/{posterImgPosition}")
+	public ResponseEntity<byte[]> getImage(@PathVariable Long posterId, @PathVariable Long posterImgPosition) {
+		PosterImg posterImg = posterImgService.getImage(posterId, posterImgPosition);
 
 		byte[] imageData = posterImg.getData();
 
@@ -68,8 +55,7 @@ public class PosterImgController {
 			@RequestParam(name = "images") MultipartFile[] images,
             @PathVariable Long posterId
 	) {
-		Poster poster = posterRepository.findById(posterId)
-				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
+		Poster poster = posterService.findById(posterId);
 		try {
 			List<MultipartFile> imagesList = Arrays.asList(images);
 			String result = posterImgService.store(imagesList, poster);
@@ -81,14 +67,7 @@ public class PosterImgController {
 
 	@DeleteMapping("/images/{posterId}/{posterImgPosition}")
 	public ResponseEntity<String> deleteImage(@PathVariable Long posterId, @PathVariable Long posterImgPosition){
-		Poster poster = posterRepository.findById(posterId)
-				.orElseThrow(() -> new PosterNotFoundException("Poster not found with id " + posterId));
-
-		PosterImg posterImg = poster.getPosterImg().stream()
-				.filter(img -> Objects.equals(img.getPosition(), posterImgPosition))
-				.findFirst()
-				.orElseThrow(() -> new PosterImgNotFoundException("Image not found with id " + posterImgPosition));
-
+		PosterImg posterImg = posterImgService.getImage(posterId, posterImgPosition);
 		try{
 			posterImgService.delete(posterImg);
 			return ResponseEntity.ok("Image deleted successfully.");
