@@ -28,6 +28,7 @@ public class PosterController {
     final private PosterService posterService;
     final private UserService userService;
 
+
     @GetMapping("/get/all")
     public ResponseEntity<List<PosterResponse>> getAllPosters() {
         List<Poster> posterList = posterService.findAll();
