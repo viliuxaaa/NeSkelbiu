@@ -1,0 +1,88 @@
+package lt.neskelbiu.java.main.demo;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lt.neskelbiu.java.main.auth.AuthenticationResponse;
+import lt.neskelbiu.java.main.auth.AuthenticationService;
+import lt.neskelbiu.java.main.auth.RegisterRequest;
+import lt.neskelbiu.java.main.poster.PosterService;
+import lt.neskelbiu.java.main.user.Role;
+import lt.neskelbiu.java.main.user.User;
+import lt.neskelbiu.java.main.user.UserResponse;
+import lt.neskelbiu.java.main.user.UserService;
+import lt.neskelbiu.java.main.message.ResponseMessage;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/admin")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Admin Controller")
+@RequiredArgsConstructor
+public class AdminController {
+
+    private final UserService userService;
+    private final AuthenticationService service;
+
+    @Operation(
+            summary = "Register new admin (body = RegisterRequest)",
+            description = "With this endpoint you register new admin, you have to provide RegisterRequest body."
+    )
+    @PostMapping("/register/admin")
+    public ResponseEntity<AuthenticationResponse> registerAdmin(
+            @RequestBody RegisterRequest request
+    ) {
+        return ResponseEntity.ok(service.register(request, Role.ADMIN));
+    }
+
+    @Operation(
+            summary = "Register new manager (body = RegisterRequest)",
+            description = "With this endpoint you register new manager, you have to provide RegisterRequest body."
+    )
+    @PostMapping("/register/manager")
+    public ResponseEntity<AuthenticationResponse> registerManager(
+            @RequestBody RegisterRequest request
+    ) {
+        return ResponseEntity.ok(service.register(request, Role.MANAGER));
+    }
+
+    @Operation(
+            summary = "Used for locking or unlocking user's account",
+            description = "With this endpoint you lock or unlock users account, you have to provide user id, which you want to lock/unlock. Does not work for admins"
+    )
+    @PutMapping("/get/{userId}/change-lock")
+    public ResponseEntity<ResponseMessage> changeLock(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+
+        if (user.getRole() == Role.ADMIN) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Admin cannot be locked"));
+        }
+
+        String message = userService.changeUserLockdownState(userId);
+
+        return ResponseEntity.ok().body(new ResponseMessage("User with id " + userId + " is " + message));
+    }
+
+    @Operation(
+            summary = "Used for deleting user account",
+            description = "With this endpoint delete user account. Need to provide user id. Does not work for admins"
+    )
+    @DeleteMapping("/get/{userId}/delete")
+    public ResponseEntity<ResponseMessage> deleteUser(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+
+        if (user.getRole() == Role.ADMIN) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Admin cannot be deleted"));
+        }
+
+        userService.deleteUser(userId);
+
+        return ResponseEntity.ok().body(new ResponseMessage("User with id " + userId + " is deleted"));
+    }
+}
