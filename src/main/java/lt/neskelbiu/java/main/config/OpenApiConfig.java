@@ -20,7 +20,9 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 description = """
                               All documentation and all current REST api endpoints are shown below. If you see lock on \s
                               the right of the endpoint, it means it must be authenticated with Bearer Token. You can\s
-                              get Bearer Access Token by using Authentication Controller.
+                              get Bearer Access Token by using Authentication Controller. You must on the client side save\s
+                              user's id, username, email, access token when user is authenticated, because those attributes\s
+                              will be used for further endpoint accessing.
                               """,
                 title = "NeSkelbiu.lt REST API",
                 version = "1.0"
