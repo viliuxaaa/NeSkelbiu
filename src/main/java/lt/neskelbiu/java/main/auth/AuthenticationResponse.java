@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lt.neskelbiu.java.main.user.Role;
 
 @Data
 @Builder
@@ -26,6 +27,9 @@ public class AuthenticationResponse {
 
     @JsonProperty
     private String email;
+
+    @JsonProperty
+    private Role role;
 
     @JsonProperty("access_token")
     private String accessToken;

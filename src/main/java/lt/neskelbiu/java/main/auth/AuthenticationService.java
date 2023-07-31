@@ -61,6 +61,7 @@ public class AuthenticationService {
                 .firstName(user.getFirstname())
                 .lastName(user.getLastname())
                 .email(request.getEmail())
+                .role(user.getRole())
                 .accessToken(jwtToken)
                 .build();
     }
@@ -86,6 +87,7 @@ public class AuthenticationService {
                 .firstName(user.getFirstname())
                 .lastName(user.getLastname())
                 .email(user.getEmail())
+                .role(user.getRole())
                 .accessToken(jwtToken)
                 .build();
     }
@@ -109,6 +111,7 @@ public class AuthenticationService {
                     .username(user.getUsername())
                     .firstName(user.getFirstname())
                     .lastName(user.getLastname())
+                    .role(user.getRole())
                     .accessToken(accessToken)
                     .build();
         }
