@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RefreshTokenRequest {
+    private Long userId;
     private String username;
+    private String userEmail;
 }

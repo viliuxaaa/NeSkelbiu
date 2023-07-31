@@ -35,6 +35,4 @@ public class UserImgService {
     public void deleteById(String id) {
         userImgRepository.deleteById(id);
     }
-
-
 }

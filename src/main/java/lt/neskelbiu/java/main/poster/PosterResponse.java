@@ -15,7 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class PosterResponse {
-    private Long posterid;
+    private Long posterId;
     private Long userId;
     private String postName;
     private String description;

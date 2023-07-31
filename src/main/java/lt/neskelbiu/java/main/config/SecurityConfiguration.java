@@ -41,7 +41,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-//                .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
@@ -75,6 +74,32 @@ public class SecurityConfiguration {
                         .anyRequest()
                         .permitAll()
                         //.authenticated()
+=======
+
+                        //manager
+                        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+
+                        //user
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
+
+                        //userImg
+                        .requestMatchers(HttpMethod.GET, "/api/v1/user/get/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user/{userId}/**").access(this::checkIfAuthorized)
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user/{userId}/**").access(this::checkIfAuthorized)
+
+                        //poster
+                        .requestMatchers(HttpMethod.GET, "/api/v1/poster/get/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/poster/{userId}/**").access(this::checkIfAuthorized)
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/poster/{userId}/**").access(this::checkIfAuthorized)
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/poster/{userId}/**").access(this::checkIfAuthorized)
+
+                        //posterImg
+                        .requestMatchers(HttpMethod.GET, "/api/v1/images/poster/get/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/images/poster/{userId}/**").access(this::checkIfAuthorized)
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/images/poster/{userId}/**").access(this::checkIfAuthorized)
+
+                        .anyRequest().authenticated()
+>>>>>>> e788083e09d19bad4191a7db85458104ca7f65ad
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -84,7 +109,7 @@ public class SecurityConfiguration {
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler(
                                 (request, response, authentication) ->
-                                SecurityContextHolder.clearContext()
+                                        SecurityContextHolder.clearContext()
                         )
                 );
 

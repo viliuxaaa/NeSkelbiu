@@ -3,8 +3,12 @@ package lt.neskelbiu.java.main.user;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 import jakarta.persistence.*;
+import lt.neskelbiu.java.main.poster.Poster;
+import lt.neskelbiu.java.main.token.RefreshToken;
+import lt.neskelbiu.java.main.token.Token;
 import lt.neskelbiu.java.main.userImg.UserImg;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -41,6 +45,8 @@ public class User implements UserDetails {
 	
 	@Column(nullable = false, unique = true)
 	private String email;
+
+	private boolean isNotLocked;
 	
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -52,6 +58,15 @@ public class User implements UserDetails {
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private UserImg userImg;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<Token> tokenList;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<RefreshToken> refreshTokenList;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<Poster> posterList;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,7 +89,7 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return isNotLocked;
 	}
 
 	@Override

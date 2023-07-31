@@ -27,24 +27,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NotNull HttpServletRequest request,        // we can intercept every request
-            @NotNull HttpServletResponse response,      // and make an extract data from for example the request and provide new data within the response
-            @NotNull FilterChain filterChain            // FilterChain - Chain of responsibility design pattern, so it will it contains the list of the other filters
-                                                        // that we need to execute. When we do the filter it will call the next filter within the chain.
+            @NotNull HttpServletRequest request,     // we can intercept every request
+            @NotNull HttpServletResponse response,   // and make an extract data from for example the request and provide new data within the response
+            @NotNull FilterChain filterChain         // FilterChain - Chain of responsibility design pattern, so it will it contains the list of the other filters
+            // that we need to execute. When we do the filter it will call the next filter within the chain.
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String userEmail;
+        final String username;
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt); //extarct the username  (email) from JWT token that we got;
+        username = jwtService.extractUsername(jwt); //extarct the username  (email) from JWT token that we got;
 
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             var isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);

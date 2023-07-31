@@ -32,10 +32,4 @@ public class DemoController {
         List<String> list = userRepository.findAll().stream().map(User::getUsername).collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
-
-    @GetMapping("/controllerr")
-    public ResponseEntity<String> sayHelloo() {
-        return ResponseEntity.ok("Hello from secure endpoint");
-    }
-
 }

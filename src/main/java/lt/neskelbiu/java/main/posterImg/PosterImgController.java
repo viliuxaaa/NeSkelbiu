@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lt.neskelbiu.java.main.exceptions.PosterImgNotFoundException;
 import lt.neskelbiu.java.main.exceptions.PosterNotFoundException;
 import org.springframework.http.*;
@@ -18,12 +21,17 @@ import lt.neskelbiu.java.main.poster.PosterService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/poster/images")
+@Tag(name = "Poster Image Controller")
+@RequestMapping("/api/v1/images/poster")
 public class PosterImgController {
 	
 	private final PosterImgService posterImgService;
 	private final PosterService posterService;
 
+	@Operation(
+			summary = "Used for getting all poster's image in array",
+			description = "With this endpoint you get all poster's image. You need to provide poster."
+	)
 	@GetMapping("/get/{posterId}")
 	public ResponseEntity<List<byte[]>> getImages(@PathVariable Long posterId) {
 		List<byte[]> imageList = posterImgService.getImageList(posterId);
@@ -36,6 +44,11 @@ public class PosterImgController {
 				.body(imageList);
 	}
 
+	@Operation(
+			summary = "Used for getting single poster's image",
+			description = "With this endpoint you get single poster's image. You need to provide poster id and position of " +
+					"the image in the poster"
+	)
 	@GetMapping("/get/{posterId}/{posterImgPosition}")
 	public ResponseEntity<byte[]> getImage(@PathVariable Long posterId, @PathVariable Long posterImgPosition) {
 		PosterImg posterImg = posterImgService.getImage(posterId, posterImgPosition);
@@ -49,10 +62,17 @@ public class PosterImgController {
 				.headers(headers)
 				.body(imageData);
 	}
-	
-	@PostMapping("/images/{posterId}/upload")
+
+	@Operation(
+			summary = "Used for uploading user's poster image",
+			description = "With this endpoint you delete user's image. You need to provide poster id. In request param you " +
+					"need to provide image param called \"image\" and give image as a file. This is protected path, for " +
+					"authenticated users only."
+	)
+	@PostMapping("/{userId}/{posterId}/upload")
+	@SecurityRequirement(name = "bearerAuth")
 	public ResponseEntity<String> uploadImages(
-			@RequestParam(name = "images") MultipartFile[] images,
+			@RequestParam(name = "image") MultipartFile[] images,
             @PathVariable Long posterId
 	) {
 		Poster poster = posterService.findById(posterId);
@@ -65,8 +85,16 @@ public class PosterImgController {
 		}
 	}
 
-	@DeleteMapping("/images/{posterId}/{posterImgPosition}")
-	public ResponseEntity<String> deleteImage(@PathVariable Long posterId, @PathVariable Long posterImgPosition){
+	@Operation(
+			summary = "Used for deleting user's poster image",
+			description = "With this endpoint you delete user's poster image. You need to provide poster id and position of image in the poster. This is protected path, for authenticated users only."
+	)
+	@DeleteMapping("/{userId}/{posterId}/{posterImgPosition}")
+	@SecurityRequirement(name = "bearerAuth")
+	public ResponseEntity<String> deleteImage(
+			@PathVariable Long posterId,
+			@PathVariable Long posterImgPosition
+	){
 		PosterImg posterImg = posterImgService.getImage(posterId, posterImgPosition);
 		try{
 			posterImgService.delete(posterImg);

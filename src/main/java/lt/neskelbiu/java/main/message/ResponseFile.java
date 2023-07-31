@@ -1,4 +1,4 @@
-package lt.neskelbiu.java.main.userImg.message;
+package lt.neskelbiu.java.main.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
