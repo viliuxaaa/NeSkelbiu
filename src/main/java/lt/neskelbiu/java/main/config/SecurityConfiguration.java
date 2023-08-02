@@ -48,7 +48,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/api/v1/auth/register",
-                                "/api/v1/auth/authenticate"
+                                "/api/v1/auth/authenticate",
+                                "/api/v1/auth/logout"
                         ).permitAll()
                         .requestMatchers(
                                 "/v3/api-docs",

@@ -17,6 +17,7 @@ import java.util.Map;
 public class PosterResponse {
     private Long posterId;
     private Long userId;
+    private String username;
     private String postName;
     private String description;
     private Map<Long, String> images;

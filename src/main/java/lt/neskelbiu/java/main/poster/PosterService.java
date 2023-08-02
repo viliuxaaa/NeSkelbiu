@@ -41,6 +41,7 @@ public class PosterService {
 				.map(poster -> PosterResponse.builder()
 						.posterId(poster.getId())
 						.userId(poster.getUser().getId())
+						.username(poster.getUser().getUsername())
 						.postName(poster.getPostName())
 						.description(poster.getDescription())
 						.images(
@@ -79,6 +80,7 @@ public class PosterService {
 		return PosterResponse.builder()
 				.posterId(poster.getId())
 				.userId(poster.getUser().getId())
+				.username(poster.getUser().getUsername())
 				.postName(poster.getPostName())
 				.description(poster.getDescription())
 				.images( poster.getPosterImg() != null
