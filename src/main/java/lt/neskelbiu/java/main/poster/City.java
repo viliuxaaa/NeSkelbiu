@@ -193,7 +193,7 @@ public enum City {
 	VILNIAUS_RAJONAS("Vilniaus Rajonas"),
 
 	@JsonProperty("Zarasų Rajonas")
-	ZARASU_RAJONAS("Zarasų Rajonas")
+	ZARASU_RAJONAS("Zarasų Rajonas");
 
 	@Getter
 	private final String name;
