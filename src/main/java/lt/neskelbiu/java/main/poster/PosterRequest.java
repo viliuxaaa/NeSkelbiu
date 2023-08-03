@@ -19,7 +19,7 @@ public class PosterRequest {
     private CategoryA categoryA;
     private CategoryB categoryB;
     private Status status;
-    private Long phoneNumber;
+    private String phoneNumber;
     private City city;
     private String website;
     private String videoLink;

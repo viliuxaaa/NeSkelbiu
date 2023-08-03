@@ -25,7 +25,7 @@ public class PosterResponse {
     private CategoryA categoryA;
     private CategoryB categoryB;
     private Status status;
-    private Long phoneNumber;
+    private String phoneNumber;
     private String city;
     private String website;
     private String videoLink;

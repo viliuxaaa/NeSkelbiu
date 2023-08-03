@@ -65,7 +65,7 @@ public class Poster {
     @JoinColumn(name = "user_id")
     public User user;
     
-    private Long phoneNumber;
+    private String phoneNumber;
     
     @Enumerated(EnumType.STRING)
     private City city;
