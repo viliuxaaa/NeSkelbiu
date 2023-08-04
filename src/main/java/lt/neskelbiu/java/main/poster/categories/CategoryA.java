@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum CategoryA {
-    KOMPIUTERIJA("kompiuterija"),
-    TECHNIKA("Technika");
-
-    @Getter
-    private final String name;
+    KOMPIUTERIAI,
+    ISORINIAI_IRENGINIAI,
+    KOMPIUTERIU_KOMPONENTAI,
+    PRIEDAI_AKSESUARAI,
+    PROGRAMINE_IRANGA_ZAIDIMAI,
+    TINKLO_IRANGA,
+    PASLAUGOS_REMONTAS,
+    KONSOLES;
 }

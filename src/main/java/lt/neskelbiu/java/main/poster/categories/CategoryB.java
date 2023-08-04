@@ -5,28 +5,69 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum CategoryB {
-    //  Kompiuterija
-    KOMPIUTERIAI("Kompiuteriai"),
-    ISORINIAI_IRENGINIAI("Isoriniai irenginiai"),
-    KOMPIUTERIU_KOMPONENTAI("Kompiuteriu komponentai"),
-    PRIEDAI_AKSESUARAI("Priedai, aksesuarai"),
-    PROGRAMINE_IRANGA("Programine iranga, zaidimai"),
-    TINKLO_IRANGA("Tinklo iranga"),
-    KOMPIUTERIJA_PASLAUGOS_REMONTAS("Paslaugos remontas"),
-    KOMPIUTERIJA_KITA("Kita"),
+    // Kompiuteriai
+    NESIOJAMI_KOMPIUTERIAI,
+    STACIONARUS_KOMPIUTERIAI,
+    SERVERIAI,
+    PLANSETINIAI_KOMPIUTERIAI,
+    ZAIDIMU_KOMPIUTERIAI,
+    ELEKTRONINES_SKAITYKLES,
+    KOMPIUTERIAI_KITA,
 
-    //  Technika
-    AUDIO("Audio"),
-    VIDEO("Video"),
-    BUITINE_TECHNIKA("Buitine technika"),
-    FOTO_OPTIKA("Foto, optika"),
-    BIURO_PREKYBINE_TECHNIKA("Biuro, prekybine technika"),
-    SODUI("Sodui, darzui, miskui"),
-    PRAMONINE_TECHNIKA("Pramonine technika"),
-    TECHNIKA_PASLAUGOS_REMONTAS("Paslaugos, remontas"),
-    TECHNIKA_KITA("Kita");
+    //Isoriniai irenginiai
+    MONITORIAI,
+    PROJEKTORIAI_SKENERIAI_SPAUSDINTUVAI,
+    AUSINES_GARSO_KOLONELES,
+    DAUGIAFUNKCINIAI_IRENGINIAI,
+    KLAVIATUROS_PELES_WEB_KAMEROS,
+    ZAIDIMU_PRIEDAI,
+    ISORINIAI_IRENGINIAI_KITA,
 
+    //Kompiuteriu komponentai
+    NESIOJAMIEMS_KOMPIUTERIAMS,
+    STACIONARIEMS_KOMPIUTERIAMS,
+    KOMPIUTERIU_KOMPONENTAI_KITA,
 
-    @Getter
-    private final String name;
+    //Priedai, aksesuarai
+    IKROVIKLIAI_BATERIJOS_AKUMULIATORIAI,
+    ADAPTERIAI_KABELIAI_JUNGTYS,
+    ATMINTIES_KORTELES_USB_ATMINTINES,
+    HDD_DEZUTES_IR_ISORINIAI_HDD,
+    KREPSIAI_KOMPIUTERIAMS,
+    UPS,
+    PRIEDAI_AKSESUARAI_KITA,
+
+    //Programine iranga, zaidimai
+    KOMPIUTERINIAI_ZAIDIMAI,
+    APPLE_PROGRAMINE_IRANGA,
+    BIURO_PROGRAMINE_IRANGA,
+    MOKOMOSIOS_PROGRAMOS,
+    OPERACINES_SISTEMOS,
+    TECHNINE_PROGRAMINE_IRANGA,
+    PROGRAMINE_IRANGA_ZAIDIMAI_KITA,
+
+    //Tinklo iranga
+    BELAIDZIO_TINKLO_IRANGA,
+    HUB,
+    MARSRUTIZATORIAI,
+    MODEMAI,
+    SWITCH,
+    AKSESUARAI_KABELIAI,
+    TINKLO_IRANGA_KITA,
+
+    //Paslaugos, remontas
+    SPAUSDINIMAS_3D,            //3D spausdinimas index puslapyje
+    REMONTAS,
+    SPAUSDINIMAS_KOPIJAVIMAS,
+    SUPIRKIMAS,
+    PASLAUGOS_REMONTAS_KITA,
+
+    //konsoles
+    SONY,
+    MICROSOFT,
+    NINTENDO,
+    SEGA,
+    PRIEDAI_DALYS,
+    PASLAUGOS,
+    KITA;
 }
