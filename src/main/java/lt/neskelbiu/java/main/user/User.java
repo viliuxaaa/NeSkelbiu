@@ -56,7 +56,7 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user") //cascade = CascadeType.REMOVE)
 	private UserImg userImg;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)

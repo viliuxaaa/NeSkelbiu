@@ -54,7 +54,7 @@ public class Poster {
 //    @Enumerated(EnumType.STRING)
 //    private CategoryModel categoryModel;
 	
-	@Column(length = 1024)
+	@Column(length = 4096)
 	private String description;
 	
 	@Enumerated(EnumType.STRING)

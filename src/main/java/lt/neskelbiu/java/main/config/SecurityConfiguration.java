@@ -88,7 +88,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/images/poster/{userId}/**").access(this::checkIfAuthorized)
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/images/poster/{userId}/**").access(this::checkIfAuthorized)
 
-                        .anyRequest().authenticated()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
