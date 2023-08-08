@@ -16,44 +16,49 @@ public interface PosterRepository extends JpaRepository<Poster, Long>{
             WHERE (:categoryA is NULL OR t.categoryA = :categoryA)\s
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
+            AND (:string is NULL OR t.postName LIKE %:string% OR t.description LIKE %:string%)
             ORDER BY price asc
             """)
-    List<Poster> searchByAndSortByPriceAcsending(CategoryA categoryA, CategoryB categoryB, City cityEnum);
+    List<Poster> searchByAndSortByPriceAcsending(CategoryA categoryA, CategoryB categoryB, City cityEnum, String string);
 
     @Query("""
             SELECT t FROM Poster t\s
             WHERE (:categoryA is NULL OR t.categoryA = :categoryA)\s
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
+            AND (:string is NULL OR t.postName LIKE %:string% OR t.description LIKE %:string%)
             ORDER BY price desc
             """)
-    List<Poster> searchByAndSortByPriceDescending(CategoryA categoryA, CategoryB categoryB, City cityEnum);
+    List<Poster> searchByAndSortByPriceDescending(CategoryA categoryA, CategoryB categoryB, City cityEnum, String string);
 
     @Query("""
             SELECT t FROM Poster t\s
             WHERE (:categoryA is NULL OR t.categoryA = :categoryA)\s
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
+            AND (:string is NULL OR t.postName LIKE %:string% OR t.description LIKE %:string%)
             ORDER BY t.createdAt DESC
             """)
-    List<Poster> searchByAndSortByCreatedAt(CategoryA categoryA, CategoryB categoryB, City cityEnum);
+    List<Poster> searchByAndSortByCreatedAt(CategoryA categoryA, CategoryB categoryB, City cityEnum, String string);
 
     @Query("""
             SELECT t FROM Poster t\s
             WHERE (:categoryA is NULL OR t.categoryA = :categoryA)\s
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
+            AND (:string is NULL OR t.postName LIKE %:string% OR t.description LIKE %:string%)
             ORDER BY t.updatedAt DESC
             """)
-    List<Poster> searchByAndSortByUpdatedAt(CategoryA categoryA, CategoryB categoryB, City cityEnum);
+    List<Poster> searchByAndSortByUpdatedAt(CategoryA categoryA, CategoryB categoryB, City cityEnum, String string);
 
     @Query("""
             SELECT t FROM Poster t\s
             WHERE (:categoryA is NULL OR t.categoryA = :categoryA)\s
             AND (:categoryB is NULL OR t.categoryB = :categoryB)\s
             AND (:cityEnum is NULL OR t.city = :cityEnum)\s
+            AND (:string is NULL OR t.postName LIKE %:string% OR t.description LIKE %:string%)
             """)
-    List<Poster> searchBy(CategoryA categoryA, CategoryB categoryB, City cityEnum);
+    List<Poster> searchBy(CategoryA categoryA, CategoryB categoryB, City cityEnum, String string);
 
     List<Poster> findByUser(User user);
 }

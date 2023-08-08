@@ -129,7 +129,8 @@ public class PosterController {
             @RequestParam(name = "city", required = false) String city,
             @RequestParam(name = "priceIsAscending", required = false) Boolean priceIsAscending,
             @RequestParam(name = "createdAt", required = false) Boolean createdAt,
-            @RequestParam(name = "updatedAt", required = false) Boolean updatedAt
+            @RequestParam(name = "updatedAt", required = false) Boolean updatedAt,
+            @RequestParam(name = "string", required = false) String string
     ) {
         List<PosterResponse> posterList = posterService.searchEngine(
                 category,
@@ -137,7 +138,8 @@ public class PosterController {
                 city,
                 priceIsAscending,
                 createdAt,
-                updatedAt
+                updatedAt,
+                string
         );
         return ResponseEntity.ok(posterList);
     }

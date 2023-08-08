@@ -153,7 +153,7 @@ public class MainApplication {
 			posterImgService.store(list1, poster11);
 
 			var poster2 = Poster.builder()
-					.postName("Aukštos Kokybės Bluetooth Ausinės su Triukšmo Slopinimu")
+					.postName("Aukštos labas Kokybės Bluetooth Ausinės su Triukšmo Slopinimu")
 					.categoryA(CategoryA.PRIEDAI_AKSESUARAI)
 					.categoryB(CategoryB.BELAIDZIO_TINKLO_IRANGA)
 					.description("Mėgaukitės puikia garso kokybe ir išskirtiniu komfortu su mūsų aukštos kokybės Bluetooth ausinėmis su triukšmo slopinimu. Šios ausinės ne tik suteiks jums puikų garso potyrių, bet ir padės jums įsiklausyti į muziką, skambučius arba podcastus be aplinkinių trikdžių.<br />\n" +
@@ -208,7 +208,7 @@ public class MainApplication {
 					.postName("Aukštos Našumo Nešiojamas Kompiuteris su 10-osios Kartos Intel procesoriumi")
 					.categoryA(CategoryA.KOMPIUTERIAI)
 					.categoryB(CategoryB.NESIOJAMI_KOMPIUTERIAI)
-					.description("Siekiant patenkinti jūsų darbo ir pramogų poreikius, pristatome aukštos našumo nešiojamą kompiuterį su 10-osios kartos Intel procesoriumi. Šis kompiuteris suteiks jums galimybę efektyviai dirbti, kurti, žaisti žaidimus ir daugiau, nepriklausomai nuo to, kur esate.")
+					.description("Siekiant labas patenkinti jūsų darbo ir pramogų poreikius, pristatome aukštos našumo nešiojamą kompiuterį su 10-osios kartos Intel procesoriumi. Šis kompiuteris suteiks jums galimybę efektyviai dirbti, kurti, žaisti žaidimus ir daugiau, nepriklausomai nuo to, kur esate.")
 					.status(Status.RESERVED)
 					.user(userService.findByUsername("manager1"))
 					.city(City.KAUNAS)
