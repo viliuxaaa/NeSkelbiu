@@ -2,6 +2,8 @@ package lt.neskelbiu.java.main.auth;
 
 import java.time.LocalDate;
 
+import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionEmail;
+import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionUsername;
 import lt.neskelbiu.java.main.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,10 +36,10 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request, Role role) {
         if (repository.findByUsername(request.getUsername()).isPresent())
-            throw(new UserAlreadyExistsException("User with this username already exists: " + request.getUsername()));
+            throw(new UserAlreadyExistsExceptionUsername("User with this username already exists: " + request.getUsername()));
 
         if (repository.findByEmail(request.getEmail()).isPresent())
-            throw(new UserAlreadyExistsException("User with this email already exists: " + request.getEmail()));
+            throw(new UserAlreadyExistsExceptionEmail("User with this email already exists: " + request.getEmail()));
 
         var user = User.builder()
                 .username(request.getUsername())

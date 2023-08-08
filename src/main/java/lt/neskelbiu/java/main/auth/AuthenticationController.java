@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionEmail;
+import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionUsername;
 import lt.neskelbiu.java.main.message.ResponseMessage;
 import lt.neskelbiu.java.main.user.Role;
 import lt.neskelbiu.java.main.user.User;
@@ -27,10 +29,16 @@ public class AuthenticationController {
             summary = "With this endpoint you register user. Send -(body = RegisterRequest), get (body = AuthenticationResponse)"
     )
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<?> register(
             @RequestBody RegisterRequest request
     ) {
-        return ResponseEntity.ok(service.register(request, Role.USER));
+        try {
+            return ResponseEntity.ok(service.register(request, Role.USER));
+        } catch (UserAlreadyExistsExceptionUsername e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("This username already exists"));
+        } catch (UserAlreadyExistsExceptionEmail e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("This email already exists"));
+        }
     }
 
     @Operation(
