@@ -156,14 +156,14 @@ public class MainApplication {
 					.postName("Aukštos Kokybės Bluetooth Ausinės su Triukšmo Slopinimu")
 					.categoryA(CategoryA.PRIEDAI_AKSESUARAI)
 					.categoryB(CategoryB.BELAIDZIO_TINKLO_IRANGA)
-					.description("Mėgaukitės puikia garso kokybe ir išskirtiniu komfortu su mūsų aukštos kokybės Bluetooth ausinėmis su triukšmo slopinimu. Šios ausinės ne tik suteiks jums puikų garso potyrių, bet ir padės jums įsiklausyti į muziką, skambučius arba podcastus be aplinkinių trikdžių.</br>\n" +
-							"</br>\n" +
+					.description("Mėgaukitės puikia garso kokybe ir išskirtiniu komfortu su mūsų aukštos kokybės Bluetooth ausinėmis su triukšmo slopinimu. Šios ausinės ne tik suteiks jums puikų garso potyrių, bet ir padės jums įsiklausyti į muziką, skambučius arba podcastus be aplinkinių trikdžių.<br />\n" +
+							"<br />\n" +
 							"Savybės:</br>\n" +
-							"</br>\n" +
-							"Triukšmo slopinimas: Patirtis visišką susikaupimą ir muzikos pasaulio pamiršimą su išskirtiniu triukšmo slopinimu. Nepriklausomai nuo to, ar esate perpildytame biure, lėktuve ar viešame transporte, joks triukšmas jūsų nesutrikdys.</br>\n" +
-							"Bluetooth 5.0: Lengvai jungiantis prie jūsų įrenginio, šios ausinės palaiko Bluetooth 5.0 technologiją, užtikrinančią stabilų ryšį ir aukštą garso kokybę.</br>\n" +
-							"Ilga Baterijos Darbo Laikas: Mėgaukitės iki 20 valandų nepertraukiamu muzikos klausymu su vienu įkrovimu. Tai puikiai tinka ilgiems kelionėms ar sportui.</br>\n" +
-							"Patogumas Visą Dieną: Ergonominis dizainas ir minkšti pagalvėlės užtikrins jūsų patogumą net ilgiausiems klausymosi seansams.</br>\n" +
+							"<br />\n" +
+							"Triukšmo slopinimas: Patirtis visišką susikaupimą ir muzikos pasaulio pamiršimą su išskirtiniu triukšmo slopinimu. Nepriklausomai nuo to, ar esate perpildytame biure, lėktuve ar viešame transporte, joks triukšmas jūsų nesutrikdys.<br/>\n" +
+							"Bluetooth 5.0: Lengvai jungiantis prie jūsų įrenginio, šios ausinės palaiko Bluetooth 5.0 technologiją, užtikrinančią stabilų ryšį ir aukštą garso kokybę.<br />\n" +
+							"Ilga Baterijos Darbo Laikas: Mėgaukitės iki 20 valandų nepertraukiamu muzikos klausymu su vienu įkrovimu. Tai puikiai tinka ilgiems kelionėms ar sportui.<br />\n" +
+							"Patogumas Visą Dieną: Ergonominis dizainas ir minkšti pagalvėlės užtikrins jūsų patogumą net ilgiausiems klausymosi seansams.<br />\n" +
 							"Valdymas Lengvai Pasiekiamas: Integruoti valdymo mygtukai leis lengvai valdyti muziką, skambučius ir garsų stiprumą.")
 					.status(Status.NOTACTIVE)
 					.user(userService.findByUsername("admin2"))

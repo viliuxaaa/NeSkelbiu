@@ -64,6 +64,7 @@ public class PosterImgService {
 	}
 	public PosterImg posterImgBuilder(MultipartFile file, Poster poster, Long position) throws IOException {
 		 String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
 		 PosterImg posterImg = PosterImg.builder()
 				 .position(position)
 				 .name(fileName)
