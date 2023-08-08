@@ -35,9 +35,9 @@ public class AuthenticationController {
         try {
             return ResponseEntity.ok(service.register(request, Role.USER));
         } catch (UserAlreadyExistsExceptionUsername e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("This username already exists"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("This username already exists"));
         } catch (UserAlreadyExistsExceptionEmail e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("This email already exists"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("This email already exists"));
         }
     }
 
