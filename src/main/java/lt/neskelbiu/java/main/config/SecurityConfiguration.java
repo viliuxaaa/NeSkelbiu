@@ -71,6 +71,7 @@ public class SecurityConfiguration {
 
                         //user
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/change-password/{userId}").access(this::checkIfAuthorized)
 
                         //userImg
                         .requestMatchers(HttpMethod.GET, "/api/v1/user/get/**").permitAll()

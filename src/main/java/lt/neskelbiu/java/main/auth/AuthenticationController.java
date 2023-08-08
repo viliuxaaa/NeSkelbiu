@@ -4,8 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lt.neskelbiu.java.main.message.ResponseMessage;
 import lt.neskelbiu.java.main.user.Role;
+import lt.neskelbiu.java.main.user.User;
+import lt.neskelbiu.java.main.user.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -48,5 +53,19 @@ public class AuthenticationController {
             @RequestBody RefreshTokenRequest request
     ) {
         return ResponseEntity.ok(service.refresh(request));
+    }
+
+    @Operation(
+            description = "Used for resetting user password",
+            summary = "With this endpoint you reset user password. Send - (body = PasswordRequest), get (body = ResponseMessage)"
+    )
+    @PostMapping("/change-password/{userId}")
+    public ResponseEntity<ResponseMessage> changePassword (
+            @RequestBody PasswordRequest request,
+            @PathVariable Long userId
+    ) {
+        service.changePassword(request, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Password has been changed"));
     }
 }

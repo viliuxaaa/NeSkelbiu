@@ -163,4 +163,16 @@ public class AuthenticationService {
                 .build();
         refreshTokenRepository.save(token);
     }
+
+    public void changePassword(PasswordRequest request, Long userId) {
+        User user = userService.findById(userId);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getUsername(),
+                        request.getOldPassword()
+                )
+        );
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        repository.save(user);
+    }
 }
