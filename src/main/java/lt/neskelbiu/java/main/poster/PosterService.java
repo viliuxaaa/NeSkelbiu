@@ -2,10 +2,7 @@ package lt.neskelbiu.java.main.poster;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -161,7 +158,8 @@ public class PosterService {
 	}
 
 	public List<PosterResponse> getLatest() {
-		List<Poster> posterList = posterRepo.searchByAndSortByCreatedAt(null, null, null, null).stream()
+		List<City> cityEnum = Arrays.asList(City.values());
+		List<Poster> posterList = posterRepo.searchByAndSortByCreatedAt(null, null, cityEnum, null).stream()
 				.limit(10)
 				.toList();
 		return posterListResponse(posterList);
@@ -171,7 +169,7 @@ public class PosterService {
 	public List<PosterResponse> searchEngine(
 			String category,
 			String type,
-			String city,
+			List<String> city,
 			Boolean priceIsAscending,
 			Boolean createdAt,
 			Boolean updatedAt,
@@ -186,11 +184,11 @@ public class PosterService {
 			}
 		}
 
-		City cityEnum = null;
+		List<City> cityEnum = Arrays.asList(City.values());
 		if (city != null) {
-			cityEnum = City.valueOf(
-					city.toUpperCase()
-			);
+			cityEnum = city.stream()
+					.map((item) -> City.valueOf(item.toUpperCase()))
+					.collect(Collectors.toList());
 		}
 
 		List<Poster> posterList;

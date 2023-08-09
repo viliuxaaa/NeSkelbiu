@@ -1,6 +1,7 @@
 package lt.neskelbiu.java.main.poster;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -126,7 +127,7 @@ public class PosterController {
     public ResponseEntity<List<PosterResponse>> getSearch(
             @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "type", required = false) String type,
-            @RequestParam(name = "city", required = false) String city,
+            @RequestParam(name = "city", required = false) List<String> city,
             @RequestParam(name = "priceIsAscending", required = false) Boolean priceIsAscending,
             @RequestParam(name = "createdAt", required = false) Boolean createdAt,
             @RequestParam(name = "updatedAt", required = false) Boolean updatedAt,
