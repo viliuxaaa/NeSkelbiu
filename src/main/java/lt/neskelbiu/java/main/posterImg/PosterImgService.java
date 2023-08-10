@@ -1,5 +1,6 @@
 package lt.neskelbiu.java.main.posterImg;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lt.neskelbiu.java.main.exceptions.PosterImgNotFoundException;
 import lt.neskelbiu.java.main.poster.Poster;

@@ -73,7 +73,6 @@ public class AuthenticationController {
             @PathVariable Long userId
     ) {
         service.changePassword(request, userId);
-
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Password has been changed"));
     }
 }

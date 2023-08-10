@@ -29,6 +29,7 @@ public class AdminController {
 
     private final UserService userService;
     private final AuthenticationService service;
+    private final PosterService posterService;
 
     @Operation(
             summary = "Register new admin (body = RegisterRequest)",
@@ -39,17 +40,6 @@ public class AdminController {
             @RequestBody RegisterRequest request
     ) {
         return ResponseEntity.ok(service.register(request, Role.ADMIN));
-    }
-
-    @Operation(
-            summary = "Register new manager (body = RegisterRequest)",
-            description = "With this endpoint you register new manager, you have to provide RegisterRequest body."
-    )
-    @PostMapping("/register/manager")
-    public ResponseEntity<AuthenticationResponse> registerManager(
-            @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(service.register(request, Role.MANAGER));
     }
 
     @Operation(
@@ -84,5 +74,26 @@ public class AdminController {
         userService.deleteUser(userId);
 
         return ResponseEntity.ok().body(new ResponseMessage("User with id " + userId + " is deleted"));
+    }
+
+    @Operation(
+            summary = "Get all users",
+            description = "With this endpoint you get all information about all users"
+    )
+    @GetMapping("/get/users")
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<User> userList = userService.getAllUsers();
+        List<UserResponse> userResponseList = userService.getResponseAllUsers(userList);
+        return ResponseEntity.ok(userResponseList);
+    }
+
+    @Operation(
+            summary = "Delete single user poster",
+            description = "With this endpoint you delete user's poster, you need to provide poster id."
+    )
+    @DeleteMapping("/get/{posterId}/delete-poster")
+    public ResponseEntity deletePoster(@PathVariable Long posterId) {
+        posterService.deleteById(posterId);
+        return ResponseEntity.ok().body(new ResponseMessage("Poster with id " + posterId + " is deleted"));
     }
 }

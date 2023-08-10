@@ -1,15 +1,19 @@
 package lt.neskelbiu.java.main.posterImg;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lt.neskelbiu.java.main.exceptions.PosterImgNotFoundException;
 import lt.neskelbiu.java.main.exceptions.PosterNotFoundException;
+import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +23,11 @@ import lt.neskelbiu.java.main.poster.Poster;
 import lt.neskelbiu.java.main.poster.PosterRepository;
 import lt.neskelbiu.java.main.poster.PosterService;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Poster Image Controller")
@@ -27,22 +36,7 @@ public class PosterImgController {
 	
 	private final PosterImgService posterImgService;
 	private final PosterService posterService;
-
-	@Operation(
-			summary = "Used for getting all poster's image in array",
-			description = "With this endpoint you get all poster's image. You need to provide poster."
-	)
-	@GetMapping("/get/{posterId}")
-	public ResponseEntity<List<byte[]>> getImages(@PathVariable Long posterId) {
-		List<byte[]> imageList = posterImgService.getImageList(posterId);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
-
-		return ResponseEntity.status(HttpStatus.OK)
-				.headers(headers)
-				.body(imageList);
-	}
+	Logger logger = LoggerFactory.getLogger(PosterImgController.class);
 
 	@Operation(
 			summary = "Used for getting single poster's image",

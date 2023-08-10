@@ -26,16 +26,6 @@ public class PosterController {
     final private PosterService posterService;
 
     @Operation(
-            summary = "Used for getting all poster"
-    )
-    @GetMapping("/get/all")
-    public ResponseEntity<List<PosterResponse>> getAllPosters() {
-        List<Poster> posterList = posterService.findAll();
-        List<PosterResponse> postersList = posterService.posterListResponse(posterList);
-        return ResponseEntity.ok(postersList);
-    }
-
-    @Operation(
             summary = "Used for getting all of single user's poster",
             description = "With this endpoint you can get all of single user's posters. You need to provide user id."
     )
