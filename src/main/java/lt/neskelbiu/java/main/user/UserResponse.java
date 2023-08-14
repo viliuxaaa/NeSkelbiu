@@ -18,4 +18,5 @@ public class UserResponse {
     private String email;
     private String createdAt;
     private String updatedAt;
+    private Boolean havePicture;
 }

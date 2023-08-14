@@ -40,6 +40,7 @@ public class UserService {
                                         ? user.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
                                         : null
                         )
+                        .havePicture(user.getUserImg() != null)
                         .build())
                 .toList();
         return responseList;
@@ -101,6 +102,7 @@ public class UserService {
                                 ? user.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
                                 : null
                 )
+                .havePicture(user.getUserImg() != null)
                 .build();
     }
 }
