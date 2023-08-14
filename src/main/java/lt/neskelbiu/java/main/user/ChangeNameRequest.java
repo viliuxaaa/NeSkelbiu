@@ -9,13 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserResponse {
-    private Long id;
-    private String username;
-    private Role role;
+public class ChangeNameRequest {
     private String firstname;
     private String lastname;
-    private String email;
-    private String createdAt;
-    private String updatedAt;
 }

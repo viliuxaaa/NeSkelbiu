@@ -21,13 +21,6 @@ public class PosterImgService {
 	private final PosterImgRepository posterImgRepository;
 	private final PosterService posterService;
 
-	public List<byte[]> getImageList(Long posterId) {
-		Poster poster = posterService.findById(posterId);
-		return poster.getPosterImg().stream()
-				.map(PosterImg::getData)
-				.toList();
-	}
-
 	public PosterImg getImage(Long posterId, Long posterImgPosition) {
 		Poster poster = posterService.findById(posterId);
 		return poster.getPosterImg().stream()
@@ -76,7 +69,9 @@ public class PosterImgService {
 		 return posterImg;
 	}
 
-	public void delete(PosterImg posterImg) {
-		posterImgRepository.deleteById(posterImg.getId());
+	public void delete(Long posterId) {
+		Poster poster = posterService.findById(posterId);
+		poster.getPosterImg()
+						.forEach((image) -> posterImgRepository.deleteById(image.getId()));
 	}
 }

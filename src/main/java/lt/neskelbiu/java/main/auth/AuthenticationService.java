@@ -1,6 +1,7 @@
 package lt.neskelbiu.java.main.auth;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionEmail;
 import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionUsername;
@@ -48,7 +49,7 @@ public class AuthenticationService {
                 .firstname(request.getFirstName())
                 .lastname(request.getLastName())
                 .email(request.getEmail())
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .isNotLocked(true)
                 .build();
 

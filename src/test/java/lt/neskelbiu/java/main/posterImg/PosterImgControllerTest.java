@@ -165,12 +165,10 @@ public class PosterImgControllerTest {
     @Test
     public void DeleteImage_DeleteSingleImage_ReturnsStatusOk() throws Exception {
         // Arrange
-        String message = "Image deleted successfully.";
-
-        when(posterImgService.getImage(Mockito.any(Long.class), Mockito.any(Long.class))).thenReturn(posterImg);
+        String message = "Images deleted successfully.";
 
         // Perform the request and verify the response
-        mockMvc.perform(delete("/api/v1/images/poster/{userId}/{posterId}/{imagePosition}", userId, posterId, imagePosition))
+        mockMvc.perform(delete("/api/v1/images/poster/{userId}/{posterId}/delete", userId, posterId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(message));
     }
@@ -178,13 +176,12 @@ public class PosterImgControllerTest {
     @Test
     public void DeleteImage_DeleteImageFailed_ReturnsStatusInternalServerError() throws Exception {
         // Arrange
-        String message = "Failed to delete image.";
+        String message = "Failed to delete images.";
 
-        when(posterImgService.getImage(Mockito.any(Long.class), Mockito.any(Long.class))).thenReturn(posterImg);
-        doThrow(new IllegalArgumentException()).when(posterImgService).delete(Mockito.any(PosterImg.class));
+        doThrow(new IllegalArgumentException()).when(posterImgService).delete(Mockito.any(Long.class));
 
         // Perform the request and verify the response
-        mockMvc.perform(delete("/api/v1/images/poster/{userId}/{posterId}/{imagePosition}", userId, posterId, imagePosition))
+        mockMvc.perform(delete("/api/v1/images/poster/{userId}/{posterId}/delete", userId, posterId))
                 .andExpect(status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().string(message));
     }

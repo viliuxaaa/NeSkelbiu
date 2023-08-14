@@ -5,6 +5,7 @@ import lt.neskelbiu.java.main.config.JwtAuthenticationFilter;
 import lt.neskelbiu.java.main.posterImg.PosterImg;
 import lt.neskelbiu.java.main.posterImg.PosterImgController;
 import lt.neskelbiu.java.main.user.User;
+import lt.neskelbiu.java.main.user.UserRepository;
 import lt.neskelbiu.java.main.user.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ public class UserImgControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    UserRepository userRepository;
 
     UserImg userImg = null;
     byte[] bytes = {};

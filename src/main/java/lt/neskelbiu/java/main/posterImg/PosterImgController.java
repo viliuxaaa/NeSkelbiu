@@ -80,21 +80,19 @@ public class PosterImgController {
 	}
 
 	@Operation(
-			summary = "Used for deleting user's poster image",
-			description = "With this endpoint you delete user's poster image. You need to provide poster id and position of image in the poster. This is protected path, for authenticated users only."
+			summary = "Used for deleting user's poster all images",
+			description = "With this endpoint you delete user's poster all images. You need to provide poster id and position of image in the poster. This is protected path, for authenticated users only."
 	)
-	@DeleteMapping("/{userId}/{posterId}/{posterImgPosition}")
+	@DeleteMapping("/{userId}/{posterId}/delete")
 	@SecurityRequirement(name = "bearerAuth")
 	public ResponseEntity<String> deleteImage(
-			@PathVariable Long posterId,
-			@PathVariable Long posterImgPosition
+			@PathVariable Long posterId
 	){
-		PosterImg posterImg = posterImgService.getImage(posterId, posterImgPosition);
 		try{
-			posterImgService.delete(posterImg);
-			return ResponseEntity.ok("Image deleted successfully.");
+			posterImgService.delete(posterId);
+			return ResponseEntity.ok("Images deleted successfully.");
 		} catch (Exception e){
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete image.");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete images.");
 		}
 	}
 }

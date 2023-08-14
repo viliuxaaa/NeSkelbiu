@@ -4,18 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lt.neskelbiu.java.main.exceptions.UserNotFoundException;
 import lt.neskelbiu.java.main.poster.PosterResponse;
 import lt.neskelbiu.java.main.posterImg.PosterImg;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-
+    @Autowired
+    UserRepository userRepository;
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -29,6 +30,16 @@ public class UserService {
                         .lastname(user.getLastname())
                         .email(user.getEmail())
                         .role(user.getRole())
+                        .createdAt(
+                                user.getCreatedAt() != null
+                                        ? user.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                        : null
+                        )
+                        .updatedAt(
+                                user.getUpdatedAt() != null
+                                        ? user.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                        : null
+                        )
                         .build())
                 .toList();
         return responseList;
@@ -57,5 +68,39 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with such email not found:" + email));
+    }
+
+    public User changeName(Long userId, ChangeNameRequest changeNameRequest) {
+        User user = findById(userId);
+        if (changeNameRequest.getFirstname() != null) {
+            user.setFirstname(changeNameRequest.getFirstname());
+            user.setUpdatedAt(LocalDateTime.now());
+        }
+        if (changeNameRequest.getLastname() != null) {
+            user.setLastname(changeNameRequest.getLastname());
+            user.setUpdatedAt(LocalDateTime.now());
+        }
+        return userRepository.save(user);
+    }
+
+    public UserResponse getResponseUser(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .createdAt(
+                        user.getCreatedAt() != null
+                                ? user.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                : null
+                )
+                .updatedAt(
+                        user.getUpdatedAt() != null
+                                ? user.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                : null
+                )
+                .build();
     }
 }

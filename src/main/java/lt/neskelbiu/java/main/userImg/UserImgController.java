@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lt.neskelbiu.java.main.user.UserRepository;
 import lt.neskelbiu.java.main.user.UserService;
 import lt.neskelbiu.java.main.message.ResponseMessage;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 // https://www.bezkoder.com/spring-boot-upload-file-database/
 
@@ -23,6 +26,7 @@ public class UserImgController {
 
     private final UserImgService userImgService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Operation(
             summary = "Used for getting user's image",
@@ -60,6 +64,8 @@ public class UserImgController {
         try {
             userImgService.store(file, user);
             message = "Uploaded the upload successfully: " + file.getOriginalFilename();
+            user.setUpdatedAt(LocalDateTime.now());
+            userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the image: " + file.getOriginalFilename() + "!";
