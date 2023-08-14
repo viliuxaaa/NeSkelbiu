@@ -135,7 +135,7 @@ public class PosterService {
 				.categoryA(post.getCategoryA())
 				.categoryB(post.getCategoryB())
 				.description(post.getDescription())
-				.price(poster.getPrice())
+				.price(post.getPrice())
 				.status(post.getStatus())
 				.user(user)
 				.phoneNumber(post.getPhoneNumber())
