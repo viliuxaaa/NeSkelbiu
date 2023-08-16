@@ -2,6 +2,7 @@ package lt.neskelbiu.java.main.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +13,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Component // @Service and @Repository extends @Component
 @RequiredArgsConstructor    //creates constructor with any final field declared in class
@@ -36,10 +40,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
+
+        // Cookie Handle
+//        Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
+//                        .orElse(new Cookie[0]))
+//                .filter(cookie -> "auth_by_cookie".equals(cookie.getName()))
+//                .findFirst();
+//
+//        if(authHeader == null || !authHeader.startsWith("Bearer ") || !cookieAuth.isPresent()) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+
+//        if(cookieAuth.isPresent()) {
+//            Cookie cookie = cookieAuth.get();
+//            String newJwt = cookie.getValue();
+//            String newUsername = jwtService.extractUsername(newJwt);
+//
+//            if (newUsername != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//                UserDetails userDetails = this.userDetailsService.loadUserByUsername(newUsername);
+//                var isTokenValid = tokenRepository.findByToken(newJwt)
+//                        .map(t -> !t.isExpired() && !t.isRevoked())
+//                        .orElse(false);
+//                if (jwtService.isTokenValid(newJwt, userDetails) && isTokenValid) {
+//                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+//                            userDetails,
+//                            null,
+//                            userDetails.getAuthorities()
+//                    );
+//                    authToken.setDetails(
+//                            new WebAuthenticationDetailsSource().buildDetails(request)
+//                    );
+//                    SecurityContextHolder.getContext().setAuthentication(authToken);
+//                }
+//            }
+//
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+
+        // Token handle
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
+
         jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt); //extarct the username  (email) from JWT token that we got;
 

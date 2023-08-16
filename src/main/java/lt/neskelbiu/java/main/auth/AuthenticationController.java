@@ -3,6 +3,8 @@ package lt.neskelbiu.java.main.auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionEmail;
 import lt.neskelbiu.java.main.exceptions.UserAlreadyExistsExceptionUsername;
@@ -47,9 +49,47 @@ public class AuthenticationController {
     )
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate (
-            @RequestBody AuthenticationRequest request
+            @RequestBody AuthenticationRequest request,
+            HttpServletResponse httpServletResponse
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        AuthenticationResponse response = service.authenticate(request);
+
+        Cookie cookie1 = new Cookie("accessToken", response.getAccessToken());
+        cookie1.setHttpOnly(false);
+        cookie1.setSecure(false);
+        cookie1.setMaxAge(60*60*24);
+        cookie1.setPath("/");
+        httpServletResponse.addCookie(cookie1);
+
+        Cookie cookie2 = new Cookie("userId", String.valueOf(response.getId()) );
+        cookie2.setHttpOnly(false);
+        cookie2.setSecure(false);
+        cookie2.setMaxAge(60*60*24);
+        cookie2.setPath("/");
+        httpServletResponse.addCookie(cookie2);
+
+        Cookie cookie3 = new Cookie("user", String.valueOf(response.getUsername()) );
+        cookie3.setHttpOnly(false);
+        cookie3.setSecure(false);
+        cookie3.setMaxAge(60*60*24);
+        cookie3.setPath("/");
+        httpServletResponse.addCookie(cookie3);
+
+        Cookie cookie4 = new Cookie("email", String.valueOf(response.getEmail()) );
+        cookie4.setHttpOnly(false);
+        cookie4.setSecure(false);
+        cookie4.setMaxAge(60*60*24);
+        cookie4.setPath("/");
+        httpServletResponse.addCookie(cookie4);
+
+        Cookie cookie5 = new Cookie("roles", String.valueOf(response.getRole()) );
+        cookie5.setHttpOnly(false);
+        cookie5.setSecure(false);
+        cookie5.setMaxAge(60*60*24);
+        cookie5.setPath("/");
+        httpServletResponse.addCookie(cookie5);
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
@@ -58,9 +98,47 @@ public class AuthenticationController {
     )
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refresh (
-            @RequestBody RefreshTokenRequest request
+            @RequestBody RefreshTokenRequest request,
+            HttpServletResponse httpServletResponse
     ) {
-        return ResponseEntity.ok(service.refresh(request));
+        AuthenticationResponse response = service.refresh(request);
+
+        Cookie cookie1 = new Cookie("accessToken", response.getAccessToken());
+        cookie1.setHttpOnly(true);
+        cookie1.setSecure(false);
+        cookie1.setMaxAge(60*60*24);
+        cookie1.setPath("/");
+        httpServletResponse.addCookie(cookie1);
+
+        Cookie cookie2 = new Cookie("userId", String.valueOf(response.getId()) );
+        cookie2.setHttpOnly(false);
+        cookie2.setSecure(false);
+        cookie2.setMaxAge(60*60*24);
+        cookie2.setPath("/");
+        httpServletResponse.addCookie(cookie2);
+
+        Cookie cookie3 = new Cookie("user", String.valueOf(response.getUsername()) );
+        cookie3.setHttpOnly(false);
+        cookie3.setSecure(false);
+        cookie3.setMaxAge(60*60*24);
+        cookie3.setPath("/");
+        httpServletResponse.addCookie(cookie3);
+
+        Cookie cookie4 = new Cookie("user", String.valueOf(response.getEmail()) );
+        cookie4.setHttpOnly(false);
+        cookie4.setSecure(false);
+        cookie4.setMaxAge(60*60*24);
+        cookie4.setPath("/");
+        httpServletResponse.addCookie(cookie4);
+
+        Cookie cookie5 = new Cookie("roles", String.valueOf(response.getRole()) );
+        cookie5.setHttpOnly(false);
+        cookie5.setSecure(false);
+        cookie5.setMaxAge(60*60*24);
+        cookie5.setPath("/");
+        httpServletResponse.addCookie(cookie5);
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
