@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NotNull FilterChain filterChain         // FilterChain - Chain of responsibility design pattern, so it will it contains the list of the other filters
             // that we need to execute. When we do the filter it will call the next filter within the chain.
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
+//        final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
@@ -51,41 +51,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
-
-//        if(cookieAuth.isPresent()) {
-//            Cookie cookie = cookieAuth.get();
-//            String newJwt = cookie.getValue();
-//            String newUsername = jwtService.extractUsername(newJwt);
-//
-//            if (newUsername != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//                UserDetails userDetails = this.userDetailsService.loadUserByUsername(newUsername);
-//                var isTokenValid = tokenRepository.findByToken(newJwt)
-//                        .map(t -> !t.isExpired() && !t.isRevoked())
-//                        .orElse(false);
-//                if (jwtService.isTokenValid(newJwt, userDetails) && isTokenValid) {
-//                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-//                            userDetails,
-//                            null,
-//                            userDetails.getAuthorities()
-//                    );
-//                    authToken.setDetails(
-//                            new WebAuthenticationDetailsSource().buildDetails(request)
-//                    );
-//                    SecurityContextHolder.getContext().setAuthentication(authToken);
-//                }
-//            }
-//
+        // Token handle
+//        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
+//        jwt = authHeader.substring(7);
 
-        // Token handle
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+
+        Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
+                        .orElse(new Cookie[0]))
+                .filter(cookie -> "accessToken".equals(cookie.getName()))
+                .findFirst();
+
+        if(!cookieAuth.isPresent()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
+        Cookie cookie = cookieAuth.get();
+        jwt = cookie.getValue();
         username = jwtService.extractUsername(jwt); //extarct the username  (email) from JWT token that we got;
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

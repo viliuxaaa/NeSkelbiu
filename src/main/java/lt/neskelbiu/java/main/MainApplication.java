@@ -2,6 +2,7 @@ package lt.neskelbiu.java.main;
 
 import lt.neskelbiu.java.main.auth.AuthenticationService;
 import lt.neskelbiu.java.main.auth.RegisterRequest;
+import lt.neskelbiu.java.main.message.ResponseMessage;
 import lt.neskelbiu.java.main.poster.*;
 import lt.neskelbiu.java.main.poster.categories.CategoryA;
 import lt.neskelbiu.java.main.poster.categories.CategoryB;
@@ -32,6 +33,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static lt.neskelbiu.java.main.user.Role.*;
@@ -62,6 +64,7 @@ public class MainApplication {
 					.email("admin1@gmail.com")
 					.build();
 			System.out.println("Admin1 token:" + service.register(admin1, ADMIN).getAccessToken());
+			System.out.println(new ResponseMessage(String.valueOf((new Date(System.currentTimeMillis() + 100000)).getTime())));
 
 			var admin2 = RegisterRequest.builder()
 					.username("admin2")

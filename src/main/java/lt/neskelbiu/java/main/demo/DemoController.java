@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,8 +19,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/demo")
 @Hidden
 public class DemoController {
-    @GetMapping("/users/{userId}/demo")
-    public  ResponseEntity<ResponseMessage> getUserName(@PathVariable String userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Hello, this is" + userId));
+    @GetMapping("")
+    public  ResponseEntity<ResponseMessage> getUserName() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(String.valueOf((new Date(System.currentTimeMillis() + 20000)).getTime())));
     }
 }
