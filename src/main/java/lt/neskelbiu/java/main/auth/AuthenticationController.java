@@ -30,6 +30,9 @@ public class AuthenticationController {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
+    @Value("${application.security.jwt.expiration}")
+    private int jwtExpiration;
+
     private final AuthenticationService service;
 
     @Operation(
@@ -63,42 +66,42 @@ public class AuthenticationController {
         Cookie cookie1 = new Cookie("accessToken", response.getAccessToken());
         cookie1.setHttpOnly(true);
         cookie1.setSecure(false);
-        cookie1.setMaxAge(8640);
+        cookie1.setMaxAge(jwtExpiration / 1000);
         cookie1.setPath("/");
         httpServletResponse.addCookie(cookie1);
 
         Cookie cookie2 = new Cookie("userId", String.valueOf(response.getId()) );
         cookie2.setHttpOnly(false);
         cookie2.setSecure(false);
-        cookie2.setMaxAge(8640);
+        cookie2.setMaxAge(jwtExpiration / 1000);
         cookie2.setPath("/");
         httpServletResponse.addCookie(cookie2);
 
         Cookie cookie3 = new Cookie("user", String.valueOf(response.getUsername()) );
         cookie3.setHttpOnly(false);
         cookie3.setSecure(false);
-        cookie3.setMaxAge(8640);
+        cookie3.setMaxAge(jwtExpiration / 1000);
         cookie3.setPath("/");
         httpServletResponse.addCookie(cookie3);
 
         Cookie cookie4 = new Cookie("email", String.valueOf(response.getEmail()) );
         cookie4.setHttpOnly(false);
         cookie4.setSecure(false);
-        cookie4.setMaxAge(8640);
+        cookie4.setMaxAge(jwtExpiration / 1000);
         cookie4.setPath("/");
         httpServletResponse.addCookie(cookie4);
 
         Cookie cookie5 = new Cookie("roles", String.valueOf(response.getRole()) );
         cookie5.setHttpOnly(false);
         cookie5.setSecure(false);
-        cookie5.setMaxAge(8640);
+        cookie5.setMaxAge(jwtExpiration / 1000);
         cookie5.setPath("/");
         httpServletResponse.addCookie(cookie5);
 
         Cookie cookie6 = new Cookie("expire", String.valueOf((new Date(System.currentTimeMillis() + refreshExpiration)).getTime()) );
         cookie6.setHttpOnly(false);
         cookie6.setSecure(false);
-        cookie6.setMaxAge(8640);
+        cookie6.setMaxAge(jwtExpiration / 1000);
         cookie6.setPath("/");
         httpServletResponse.addCookie(cookie6);
 
@@ -120,35 +123,35 @@ public class AuthenticationController {
         Cookie cookie1 = new Cookie("accessToken", response.getAccessToken());
         cookie1.setHttpOnly(true);
         cookie1.setSecure(false);
-        cookie1.setMaxAge(8640);
+        cookie1.setMaxAge(jwtExpiration / 1000);
         cookie1.setPath("/");
         httpServletResponse.addCookie(cookie1);
 
         Cookie cookie2 = new Cookie("userId", String.valueOf(response.getId()) );
         cookie2.setHttpOnly(false);
         cookie2.setSecure(false);
-        cookie2.setMaxAge(8640);
+        cookie2.setMaxAge(jwtExpiration / 1000);
         cookie2.setPath("/");
         httpServletResponse.addCookie(cookie2);
 
         Cookie cookie3 = new Cookie("user", String.valueOf(response.getUsername()) );
         cookie3.setHttpOnly(false);
         cookie3.setSecure(false);
-        cookie3.setMaxAge(8640);
+        cookie3.setMaxAge(jwtExpiration / 1000);
         cookie3.setPath("/");
         httpServletResponse.addCookie(cookie3);
 
         Cookie cookie4 = new Cookie("user", String.valueOf(response.getEmail()) );
         cookie4.setHttpOnly(false);
         cookie4.setSecure(false);
-        cookie4.setMaxAge(8640);
+        cookie4.setMaxAge(jwtExpiration / 1000);
         cookie4.setPath("/");
         httpServletResponse.addCookie(cookie4);
 
         Cookie cookie5 = new Cookie("roles", String.valueOf(response.getRole()) );
         cookie5.setHttpOnly(false);
         cookie5.setSecure(false);
-        cookie5.setMaxAge(8640);
+        cookie5.setMaxAge(jwtExpiration / 1000);
         cookie5.setPath("/");
         httpServletResponse.addCookie(cookie5);
 
