@@ -1,6 +1,5 @@
-package lt.neskelbiu.java.main.demo;
+package lt.neskelbiu.java.main.admin;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,7 +13,6 @@ import lt.neskelbiu.java.main.user.User;
 import lt.neskelbiu.java.main.user.UserResponse;
 import lt.neskelbiu.java.main.user.UserService;
 import lt.neskelbiu.java.main.message.ResponseMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

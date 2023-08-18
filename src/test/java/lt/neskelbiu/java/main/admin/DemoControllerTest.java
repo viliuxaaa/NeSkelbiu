@@ -1,4 +1,4 @@
-package lt.neskelbiu.java.main.demo;
+package lt.neskelbiu.java.main.admin;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

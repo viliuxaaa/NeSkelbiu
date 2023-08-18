@@ -1,4 +1,4 @@
-package lt.neskelbiu.java.main.demo;
+package lt.neskelbiu.java.main.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.neskelbiu.java.main.auth.AuthenticationResponse;

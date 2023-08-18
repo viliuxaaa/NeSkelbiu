@@ -101,7 +101,6 @@ public class AuthenticationController {
         Cookie cookie6 = new Cookie("expire", String.valueOf((new Date(System.currentTimeMillis() + refreshExpiration)).getTime()) );
         cookie6.setHttpOnly(false);
         cookie6.setSecure(false);
-        cookie6.setMaxAge(jwtExpiration / 1000);
         cookie6.setPath("/");
         httpServletResponse.addCookie(cookie6);
 

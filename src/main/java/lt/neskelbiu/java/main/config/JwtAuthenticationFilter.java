@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@Component // @Service and @Repository extends @Component
-@RequiredArgsConstructor    //creates constructor with any final field declared in class
+@Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -31,34 +31,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NotNull HttpServletRequest request,     // we can intercept every request
-            @NotNull HttpServletResponse response,   // and make an extract data from for example the request and provide new data within the response
-            @NotNull FilterChain filterChain         // FilterChain - Chain of responsibility design pattern, so it will it contains the list of the other filters
-            // that we need to execute. When we do the filter it will call the next filter within the chain.
+            @NotNull HttpServletRequest request,
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain filterChain
     ) throws ServletException, IOException {
-//        final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
-
-        // Cookie Handle
-//        Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
-//                        .orElse(new Cookie[0]))
-//                .filter(cookie -> "auth_by_cookie".equals(cookie.getName()))
-//                .findFirst();
-//
-//        if(authHeader == null || !authHeader.startsWith("Bearer ") || !cookieAuth.isPresent()) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-        // Token handle
+//        // Token handle
+//        final String authHeader = request.getHeader("Authorization");
 //        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
 //        jwt = authHeader.substring(7);
 
-
+        // Cookie handle
         Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
                         .orElse(new Cookie[0]))
                 .filter(cookie -> "accessToken".equals(cookie.getName()))
@@ -68,10 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
         Cookie cookie = cookieAuth.get();
         jwt = cookie.getValue();
-        username = jwtService.extractUsername(jwt); //extarct the username  (email) from JWT token that we got;
+
+        username = jwtService.extractUsername(jwt);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
