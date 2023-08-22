@@ -45,17 +45,17 @@ public class MainApplication {
 		SpringApplication.run(MainApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(
-			AuthenticationService service,
-			PosterService posterService,
-			UserService userService,
-			PosterImgService posterImgService,
-			UserImgService userImgService,
-			UserImgController userImgController
-	) {
-		return args -> {
-
+//	@Bean
+//	public CommandLineRunner commandLineRunner(
+//			AuthenticationService service,
+//			PosterService posterService,
+//			UserService userService,
+//			PosterImgService posterImgService,
+//			UserImgService userImgService,
+//			UserImgController userImgController
+//	) {
+//		return args -> {
+//
 //			var admin1 = RegisterRequest.builder()
 //					.username("admin1")
 //					.password("admin1")
@@ -405,7 +405,7 @@ public class MainApplication {
 //			Poster poster110 = posterService.findById(10L);
 //			List<MultipartFile> list10 = Arrays.asList(multipartFile22);
 //			posterImgService.store(list10, poster110);
-		};
-	}
+//		};
+//	}
 
 }
